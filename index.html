@@ -74,12 +74,54 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn svg{width:18px;height:18px;flex:none}
 
 /* filters */
-.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:1.25rem}
-.filters input,.filters select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;min-width:0}
-.filters input{flex:1 1 220px}
-.filters select{flex:0 1 auto}
-.check{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--muted);cursor:pointer}
-.result-line{color:var(--muted);font-size:.9rem;padding-bottom:.75rem;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.finder{display:grid;gap:12px;padding-block:1.4rem .6rem}
+.finder>*{min-width:0}
+.search-row{display:flex;gap:10px;align-items:stretch;min-width:0}
+.search-box input{width:100%}
+.search-box{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 14px;transition:border-color .2s ease,box-shadow .2s ease}
+.search-box:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.search-box svg{width:20px;height:20px;color:var(--muted);flex:none}
+.search-box input{flex:1;min-width:0;border:0;background:transparent;padding:.85rem 0;font-size:1rem;outline:none}
+.filter-toggle{border-radius:14px;padding-inline:1.1rem;display:none}
+.filter-toggle svg{width:18px;height:18px}
+.f-count{background:var(--accent);color:var(--accent-ink);border-radius:999px;min-width:20px;height:20px;font-size:.75rem;display:grid;place-items:center;padding:0 6px}
+.f-panel{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) auto;gap:10px;align-items:end}
+.f-field{display:flex;flex-direction:column;gap:4px;font-size:.78rem;color:var(--muted);min-width:0}
+.f-field select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:.6rem .7rem;min-width:0;width:100%;color:var(--ink);font-size:.92rem}
+.check{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--muted);cursor:pointer;white-space:nowrap;padding-bottom:.6rem}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:.2rem .4rem .2rem .7rem;font-size:.82rem;color:var(--ink);cursor:pointer}
+.chip b{font-weight:400;color:var(--muted)}
+.chip span{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--surface);font-size:.8rem}
+.chip.clear{background:transparent;color:var(--accent);border-color:transparent}
+@media (max-width:1000px){.f-panel{grid-template-columns:repeat(3,minmax(0,1fr))}.check{padding-bottom:0}}
+@media (max-width:640px){
+  .filter-toggle{display:inline-flex}
+  .f-panel{grid-template-columns:repeat(2,minmax(0,1fr));background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px}
+  .f-panel:not(.open){display:none}
+}
+/* favorites + compare on cards */
+.card-tools{position:absolute;top:10px;inset-inline-end:10px;z-index:2;display:flex;flex-direction:column;gap:6px}
+.tool{width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#0B1E28;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .15s ease,background .15s ease}
+.tool:hover{transform:scale(1.08)}
+.tool svg{width:19px;height:19px}
+.tool[aria-pressed="true"].fav{color:#E0342C}
+.tool[aria-pressed="true"].cmp{background:var(--accent);color:var(--accent-ink)}
+.card{position:relative}
+.cmp-bar{position:fixed;z-index:45;inset-inline:0;bottom:0;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--hero-bg);color:var(--hero-ink);box-shadow:0 -10px 30px rgba(0,0,0,.25)}
+.cmp-inner{max-width:1180px;margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px max(16px,env(safe-area-inset-left,0px)) 12px max(16px,env(safe-area-inset-right,0px))}
+.cmp-actions{display:flex;gap:8px}
+body:has(#cmpBar:not([hidden])) .fab{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
+.cmp-table-wrap{overflow-x:auto}
+.cmp-table{width:100%;border-collapse:collapse;min-width:520px}
+.cmp-table th,.cmp-table td{padding:.6rem .7rem;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;font-size:.92rem}
+.cmp-table thead th{vertical-align:bottom}
+.cmp-table th[scope=row]{color:var(--muted);font-weight:500;white-space:nowrap;width:1%}
+.cmp-table img{width:100%;max-width:220px;aspect-ratio:4/3;object-fit:cover;border-radius:10px;display:block;margin-bottom:6px}
+.cmp-table .diff td{background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.d-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.d-tools .btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.result-line{color:var(--muted);font-size:.9rem;padding-bottom:.9rem;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 
 /* grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;padding-bottom:2.5rem}
@@ -356,20 +398,29 @@ dl.spec dd{font-weight:500}
     </div>
   </header>
   <main class="wrap" id="cars">
-    <div class="filters" role="search">
-      <input id="q" type="search" placeholder="ابحث: سورينتو، توسان، GV80…" aria-label="بحث">
-      <select id="fBrand" aria-label="الماركة"><option value="">كل الماركات</option></select>
-      <select id="fBody" aria-label="نوع السيارة"><option value="">كل الأنواع</option></select>
-      <select id="fBranch" aria-label="مكان السيارة"><option value="">كل الأماكن</option></select>
-      <select id="fSort" aria-label="الترتيب">
-        <option value="new">الأحدث إضافة</option>
-        <option value="year">الموديل: الأحدث</option>
-        <option value="km">الممشى: الأقل</option>
-        <option value="price">السعر: الأقل</option>
-      </select>
-      <label class="check"><input type="checkbox" id="fSold"> إظهار المباع</label>
+    <div class="finder" role="search">
+      <div class="search-row">
+        <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="q" type="search" placeholder="ابحث بالاسم: سورينتو، كيا 2026، هايبرد…" aria-label="بحث" autocomplete="off"></label>
+        <button class="btn btn-line filter-toggle" id="fToggle" type="button" aria-expanded="false" aria-controls="fPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>فلترة<span class="f-count" id="fCount" hidden></span></button>
+      </div>
+      <div class="f-panel" id="fPanel">
+        <label class="f-field">الماركة<select id="fBrand"><option value="">كل الماركات</option></select></label>
+        <label class="f-field">النوع<select id="fBody"><option value="">كل الأنواع</option></select></label>
+        <label class="f-field">مكان العربية<select id="fBranch"><option value="">كل الأماكن</option></select></label>
+        <label class="f-field">الوقود<select id="fFuel"><option value="">الكل</option></select></label>
+        <label class="f-field">الموديل من<select id="fYear"><option value="">أي سنة</option></select></label>
+        <label class="f-field">الترتيب<select id="fSort">
+          <option value="new">الأحدث إضافة</option>
+          <option value="year">الموديل: الأحدث</option>
+          <option value="km">الممشى: الأقل</option>
+          <option value="price">السعر: الأقل</option>
+          <option value="price-d">السعر: الأعلى</option>
+        </select></label>
+        <label class="check"><input type="checkbox" id="fSold"> إظهار المباع</label>
+      </div>
     </div>
-    <div class="result-line"><span id="count"></span></div>
+    <div class="result-line"><span id="count"></span><div class="chips" id="chips"></div></div>
     <section class="grid" id="grid" aria-live="polite"></section>
     <div class="more-wrap" id="moreWrap" hidden><button class="btn btn-line more-btn" id="moreBtn" type="button">عرض المزيد</button></div>
   </main>
@@ -461,6 +512,17 @@ dl.spec dd{font-weight:500}
     </div>
     <button class="fab-btn" id="fabBtn" type="button" aria-expanded="false" aria-controls="fabMenu" aria-label="تواصل على واتساب"></button>
   </div>
+
+  <div class="cmp-bar" id="cmpBar" hidden>
+    <div class="cmp-inner">
+      <span id="cmpText"></span>
+      <div class="cmp-actions"><button class="btn btn-accent btn-sm" id="cmpOpen" type="button">قارن الآن</button><button class="btn btn-ghost btn-sm" id="cmpClear" type="button">إلغاء</button></div>
+    </div>
+  </div>
+  <dialog id="compare" aria-labelledby="cTitle">
+    <div class="dlg-head"><h2 id="cTitle">مقارنة السيارات</h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-body"><div class="cmp-table-wrap" id="cmpBody"></div></div>
+  </dialog>
 
   <dialog id="detail" aria-labelledby="dTitle">
     <div class="dlg-head"><h2 id="dTitle"></h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
@@ -647,20 +709,76 @@ function refreshBrandOptions(){
 }
 fillSelect($("fBody"),Object.entries(BODY));
 fillSelect($("fBranch"),Object.entries(BRANCHES).map(([k,v])=>[k,v.short]));
-for(const id of ["q","fBrand","fBody","fBranch","fSort","fSold"])$(id).addEventListener("input",()=>{shown=PAGE;render()});
+fillSelect($("fFuel"),Object.entries(FUEL));
+for(let y=new Date().getFullYear()+1;y>=2015;y--)$("fYear").append(h("option",{value:y},y+" وأحدث"));
+const FILTER_IDS=["q","fBrand","fBody","fBranch","fFuel","fYear","fSort","fSold"];
+for(const id of FILTER_IDS)$(id).addEventListener("input",()=>{shown=PAGE;render()});
+$("fToggle").addEventListener("click",()=>{const o=$("fPanel").classList.toggle("open");$("fToggle").setAttribute("aria-expanded",String(o))});
+/* favorites (kept on this device) */
+let favs=new Set(),favView=false;
+try{favs=new Set(JSON.parse(localStorage.getItem("afandina-favs")||"[]"))}catch(e){}
+const saveFavs=()=>{try{localStorage.setItem("afandina-favs",JSON.stringify([...favs]))}catch(e){}};
+function toggleFav(id){favs.has(id)?favs.delete(id):favs.add(id);saveFavs();render()}
+/* compare */
+const cmp=new Set();
+function toggleCmp(id){if(cmp.has(id))cmp.delete(id);else{if(cmp.size>=3){toast("تقدر تقارن 3 عربيات بالكتير");return}cmp.add(id)}render()}
+const ICON_HEART=["0 0 24 24",'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor" fill-opacity="var(--ff,0)" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>'];
+const ICON_CMP=["0 0 24 24",'<path d="M8 4v16M16 4v16M4 8h4M16 16h4M4 16h4M16 8h4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>'];
+function favBtn(c,big){const on=favs.has(c.id);const b=h("button",{class:big?"btn btn-line":"tool fav",type:"button","aria-pressed":String(on),"aria-label":on?"شيل من المفضلة":"ضيف للمفضلة",title:on?"شيل من المفضلة":"ضيف للمفضلة",style:on?"--ff:1":null},svg(ICON_HEART),big?(on?"في المفضلة":"ضيف للمفضلة"):null);b.addEventListener("click",e=>{e.stopPropagation();toggleFav(c.id);if(big){const n=favs.has(c.id);b.setAttribute("aria-pressed",String(n));b.style.setProperty("--ff",n?1:0);b.lastChild.textContent=n?"في المفضلة":"ضيف للمفضلة"}});return b}
+function cmpBtn(c,big){const on=cmp.has(c.id);const b=h("button",{class:big?"btn btn-line":"tool cmp",type:"button","aria-pressed":String(on),"aria-label":on?"شيل من المقارنة":"ضيف للمقارنة",title:on?"شيل من المقارنة":"ضيف للمقارنة"},svg(ICON_CMP),big?(on?"في المقارنة":"قارن"):null);b.addEventListener("click",e=>{e.stopPropagation();toggleCmp(c.id);if(big){const n=cmp.has(c.id);b.setAttribute("aria-pressed",String(n));b.lastChild.textContent=n?"في المقارنة":"قارن"}});return b}
+function renderChips(){
+  const box=$("chips"),list=[];
+  const add=(label,val,clear)=>list.push(h("button",{class:"chip",type:"button","aria-label":"شيل "+label},h("b",null,label+":"),val,h("span",{"aria-hidden":"true"},"×")));
+  const sel=(id,label)=>{const el=$(id);if(el.value){add(label,el.options[el.selectedIndex].text);list[list.length-1].addEventListener("click",()=>{el.value="";shown=PAGE;render()})}};
+  if($("q").value.trim()){add("بحث",$("q").value.trim());list[list.length-1].addEventListener("click",()=>{$("q").value="";render()})}
+  sel("fBrand","الماركة");sel("fBody","النوع");sel("fBranch","المكان");sel("fFuel","الوقود");sel("fYear","الموديل");
+  if($("fSold").checked){add("يشمل","المباع");list[list.length-1].addEventListener("click",()=>{$("fSold").checked=false;render()})}
+  if(favView){add("عرض","المفضلة");list[list.length-1].addEventListener("click",()=>{favView=false;render()})}
+  const active=list.length;
+  if(active>1){const c=h("button",{class:"chip clear",type:"button"},"مسح الكل");c.addEventListener("click",()=>{for(const id of FILTER_IDS){const el=$(id);if(el.type==="checkbox")el.checked=false;else if(id!=="fSort")el.value=""}favView=false;shown=PAGE;render()});list.push(c)}
+  if(favs.size&&!favView){const f=h("button",{class:"chip",type:"button"},svg(ICON_HEART),"المفضلة ("+favs.size+")");f.querySelector("svg").setAttribute("style","width:14px;height:14px;color:#E0342C;--ff:1");f.addEventListener("click",()=>{favView=true;shown=PAGE;render()});list.push(f)}
+  box.replaceChildren(...list);
+  const n=["fBrand","fBody","fBranch","fFuel","fYear"].filter(id=>$(id).value).length+($("fSold").checked?1:0);
+  $("fCount").hidden=!n;$("fCount").textContent=n;
+}
+function renderCmpBar(){
+  const bar=$("cmpBar");bar.hidden=!cmp.size;if(!cmp.size)return;
+  $("cmpText").textContent=cmp.size===1?"اختار عربية تانية عشان تقارن":"مختار "+cmp.size+" عربيات للمقارنة";
+  $("cmpOpen").disabled=cmp.size<2;
+}
+function openCompare(){
+  const cars=[...cmp].map(id=>state.cars.find(c=>c.id===id)).filter(Boolean);if(cars.length<2)return;
+  const rows=[["السعر",c=>{const e=effPrice(c);return e.price==null||e.price===""?"عند التواصل":fmt(e.price)+" "+(CUR[e.currency]||e.currency||"")}],["الموديل",c=>c.year],["الفئة",c=>c.trim],["الممشى",c=>c.km!=null&&c.km!==""?fmt(c.km)+" كم":""],["المحرك",c=>c.cc?fmt(c.cc)+" cc":""],["القوة",c=>c.hp?c.hp+" حصان":""],["الوقود",c=>FUEL[c.fuel]],["ناقل الحركة",c=>c.trans],["الدفع",c=>DRIVE[c.drive]],["المقاعد",c=>c.seats],["اللون",c=>c.color],["الفرش",c=>c.interior],["الفحص",c=>c.inspection],["المكان",c=>(BRANCHES[c.branch]||{}).short],["الحالة",c=>STATUS[c.status]]];
+  const head=h("tr",null,h("th",null,""),cars.map(c=>h("th",{scope:"col"},(c.photos||[])[0]?h("img",{src:thumbUrl(c.photos[0]),alt:""}):null,h("b",null,title(c)))));
+  const body=rows.map(([label,f])=>{const vals=cars.map(c=>{const v=f(c);return v==null||v===""?"—":String(v)});const diff=new Set(vals).size>1;return h("tr",{class:diff?"diff":null},h("th",{scope:"row"},label),vals.map(v=>h("td",null,v)))});
+  const actions=h("tr",null,h("th",null,""),cars.map(c=>h("td",null,c.status!=="sold"?waBtns(c,"btn-sm")[0]:"")));
+  $("cmpBody").replaceChildren(h("p",{style:"margin:0 0 10px;color:var(--muted);font-size:.85rem"},"الصفوف المظللة فيها اختلاف بين العربيات."),h("table",{class:"cmp-table"},h("thead",null,head),h("tbody",null,body,actions)));
+  $("compare").showModal();
+}
 
+const AR_NAMES={kia:"كيا",hyundai:"هيونداي هيونداى هونداي",genesis:"جينيسيس جنسس جينيسس",sorento:"سورينتو سورنتو",sportage:"سبورتاج سبورتيج",carnival:"كرنفال كارنفال",telluride:"تيلورايد",seltos:"سيلتوس",k5:"كي5",k8:"كي8",tucson:"توسان",santafe:"سانتافي سنتافي","santa fe":"سانتافي",sonata:"سوناتا",elantra:"النترا",azera:"ازيرا",grandeur:"جراندير",palisade:"باليسيد",staria:"ستاريا",gv70:"جي في 70",gv80:"جي في 80",g80:"جي 80",torres:"توريس",mercedes:"مرسيدس",bmw:"بي ام",lexus:"لكزس"};
+const norm=t=>String(t==null?"":t).toLowerCase().replace(/[\u064B-\u0652\u0640]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/-/g," ").trim();
+function hayOf(c){
+  const extra=[];const k=(c.brand+" "+c.model).toLowerCase();
+  for(const key in AR_NAMES)if(k.includes(key))extra.push(AR_NAMES[key]);
+  const ar=BRAND_GROUPS.flatMap(g=>g[1]).find(b=>b[0]===c.brand);
+  return norm([c.brand,c.model,c.trim,c.year,c.color,c.interior,c.id,FUEL[c.fuel],BODY[c.body],DRIVE[c.drive],(BRANCHES[c.branch]||{}).name,ar&&ar[1],extra.join(" "),c.status&&STATUS[c.status]].join(" "));
+}
 function filtered(){
-  const q=$("q").value.trim().toLowerCase(),br=$("fBrand").value,bd=$("fBody").value,loc=$("fBranch").value,sold=$("fSold").checked;
+  const q=norm($("q").value),br=$("fBrand").value,bd=$("fBody").value,loc=$("fBranch").value,sold=$("fSold").checked,fu=$("fFuel").value,yr=Number($("fYear").value)||0,favOnly=favView;
   let list=state.cars.filter(c=>{
     if(!sold&&c.status==="sold")return false;
     if(br&&c.brand!==br)return false;
     if(bd&&c.body!==bd)return false;
     if(loc&&c.branch!==loc)return false;
-    if(q){const hay=[c.brand,c.model,c.trim,c.year,c.color,c.id,FUEL[c.fuel]].join(" ").toLowerCase();if(!q.split(/\s+/).every(w=>hay.includes(w)))return false}
+    if(fu&&c.fuel!==fu)return false;
+    if(yr&&!((c.year||0)>=yr))return false;
+    if(favOnly&&!favs.has(c.id))return false;
+    if(q){const hay=hayOf(c);if(!q.split(/\s+/).filter(Boolean).every(w=>hay.includes(w)))return false}
     return true;
   });
   const s=$("fSort").value,num=v=>(v==null||v==="")?Infinity:Number(v);
-  list.sort((a,b)=>s==="year"?(b.year||0)-(a.year||0):s==="km"?num(a.km)-num(b.km):s==="price"?num(effPrice(a).price)-num(effPrice(b).price):(b.added||0)-(a.added||0));
+  list.sort((a,b)=>s==="year"?(b.year||0)-(a.year||0):s==="km"?num(a.km)-num(b.km):s==="price"?num(effPrice(a).price)-num(effPrice(b).price):s==="price-d"?(Number(effPrice(b).price)||-1)-(Number(effPrice(a).price)||-1):(b.added||0)-(a.added||0));
   return list;
 }
 
@@ -669,6 +787,7 @@ function card(c){
   return h("article",{class:"card"},
     h("button",{class:"ph-link",type:"button","aria-label":"تفاصيل "+title(c),onclick:()=>openCar(c.id)},
       h("div",{class:"ph"},cover(c),h("div",{class:"badges"},statusBadge(c),c.sample&&h("span",{class:"badge ex"},"مثال")),photoPrice(c))),
+    h("div",{class:"card-tools"},favBtn(c),cmpBtn(c)),
     h("div",{class:"card-body"},
       h("h3",null,title(c)),
       c.trim&&h("div",{class:"trim"},c.trim),
@@ -683,8 +802,9 @@ function card(c){
 function render(){
   const all=filtered(),list=all.slice(0,shown);
   const grid=$("grid");
-  grid.replaceChildren(...(list.length?list.map(card):[h("div",{class:"empty"},state.cars.length?($("fBrand").value?"مفيش "+$("fBrand").value+" معروضة دلوقتي، بس نقدر نجيبهالك من كوريا. ابعتلنا المواصفات على واتساب.":"مفيش عربيات بالمواصفات دي حالياً. ابعتلنا على واتساب وإحنا نجيبهالك من كوريا."):"لسه مفيش عربيات معروضة. تابعنا أو كلمنا على واتساب.")]));
-  $("count").textContent=all.length+" سيارة معروضة";
+  grid.replaceChildren(...(list.length?list.map(card):[h("div",{class:"empty"},favView?"لسه مضفتش عربيات للمفضلة. دوس على ♡ فوق صورة أي عربية.":state.cars.length?($("fBrand").value?"مفيش "+$("fBrand").value+" معروضة دلوقتي، بس نقدر نجيبهالك من كوريا. ابعتلنا المواصفات على واتساب.":"مفيش عربيات بالمواصفات دي حالياً. ابعتلنا على واتساب وإحنا نجيبهالك من كوريا."):"لسه مفيش عربيات معروضة. تابعنا أو كلمنا على واتساب.")]));
+  $("count").textContent=(favView?"المفضلة: ":"")+all.length+" سيارة معروضة";
+  renderChips();renderCmpBar();
   const more=$("moreWrap");more.hidden=all.length<=shown;
   $("moreBtn").textContent="عرض المزيد ("+(all.length-shown)+" سيارة)";
   const avail=state.cars.filter(c=>c.status==="available");
@@ -781,6 +901,7 @@ function openCar(id,fromHash){
       h("div",{style:"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"},statusBadge(c),c.sample&&h("span",{class:"badge ex"},"مثال")),
       h("div",{class:"big-price"},priceNode(c)),
       h("div",{class:"code"},"كود السيارة: "+c.id),
+      h("div",{class:"d-tools"},favBtn(c,true),cmpBtn(c,true)),
       h("dl",{class:"spec",style:"margin-top:12px"},rows.flatMap(r=>[h("dt",null,r[0]),h("dd",null,r[1])])),
       h("div",{class:"detail-cta"},c.status!=="sold"?waBtns(c):h("div",{class:"note"},"العربية دي اتباعت. كلمنا ونجيبلك زيها.")))));
   const d=$("detail");if(!d.open)d.showModal();
@@ -795,6 +916,8 @@ for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=
 
 function toast(msg,ms){const t=h("div",{class:"toast",role:"status"},msg);document.body.append(t);setTimeout(()=>t.remove(),ms||2600)}
 
+$("cmpOpen").addEventListener("click",openCompare);
+$("cmpClear").addEventListener("click",()=>{cmp.clear();render()});
 $("moreBtn").addEventListener("click",()=>{const before=document.querySelectorAll("#grid .card").length;shown+=PAGE;render();const cards=document.querySelectorAll("#grid .card");setupReveal($("grid"));if(cards[before])cards[before].querySelector(".ph-link")?.focus({preventScroll:true})});
 refreshBrandOptions();render();fromHash();setupReveal();
 
@@ -1021,5 +1144,4 @@ $("manage").addEventListener("click",openManager);
 })();
 })();
 </script>
-
 </body></html>
