@@ -165,6 +165,14 @@ html{scroll-behavior:smooth}
 .ph-copy svg{width:18px;height:18px}
 .ph-copy.ok{background:var(--hero-gold);color:var(--hero-bg)}
 .b-actions .btn{flex:1;padding-block:.7rem}
+.addr{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-top:-6px}
+.addr .area{margin-top:0;min-width:0}
+.map-btn{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--hero-gold);font-size:.72rem}
+.map-btn svg{width:20px;height:20px;box-sizing:content-box;padding:11px;border-radius:50%;border:1px solid rgba(226,184,90,.55);transition:background .2s ease,color .2s ease}
+.map-btn:hover svg,.map-btn:focus-visible svg{background:var(--hero-gold);color:var(--hero-bg)}
+.b-card .area{line-height:1.6}
+.hours{display:flex;align-items:center;gap:8px;font-size:.88rem;color:var(--hero-gold);margin-top:-6px}
+.hours svg{width:16px;height:16px;flex:none}
 .social{margin-top:2.25rem;display:flex;align-items:center;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;padding-top:1.5rem;border-top:1px solid rgba(226,184,90,.25)}
 .social h3{font-family:var(--f-display);font-size:1.05rem;font-weight:700}
 .social h3 small{display:block;font-family:var(--f-body);font-weight:400;font-size:.82rem;color:var(--hero-muted);margin-top:2px}
@@ -407,9 +415,9 @@ dl.spec dd{font-weight:500}
 "use strict";
 const PHONES={eg:{label:"واتساب مصر",show:"01113298457",wa:"201113298457"},sa:{label:"واتساب السعودية",show:"+966 56 963 4665",wa:"966569634665"}};
 const BRANCHES={
-  "eg-10r":{name:"مصر — العاشر من رمضان",short:"العاشر من رمضان",phone:"eg"},
-  "eg-nasr":{name:"مصر — مدينة نصر (عباس العقاد)",short:"مدينة نصر",phone:"eg"},
-  "sa-ryd":{name:"السعودية — الرياض (معارض القادسية)",short:"الرياض",phone:"sa"},
+  "eg-10r":{name:"مصر — العاشر من رمضان (سكاي دجلة مول)",short:"العاشر من رمضان",phone:"eg"},
+  "eg-nasr":{name:"مصر — مدينة نصر (شارع الطيران)",short:"مدينة نصر",phone:"eg"},
+  "sa-ryd":{name:"السعودية — الرياض (معارض القادسية، شارع وادي السرح)",short:"الرياض",phone:"sa"},
   "kr":{name:"في كوريا — جاهزة للشحن",short:"في كوريا",phone:"both"}
 };
 const BODY={sedan:"سيدان",suv:"SUV",van:"فان / عائلية",hatch:"هاتشباك",pickup:"بيك أب"};
@@ -577,11 +585,12 @@ $("heroCta").append(
 /* branches */
 const COPY_ICON=["0 0 24 24",'<rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" fill="none" stroke="currentColor" stroke-width="1.8"/>'];
 const CHECK_ICON=["0 0 24 24",'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'];
+const CLOCK_ICON=["0 0 24 24",'<circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'];
 const PRETTY={eg:[null,"0111 329 8457"],sa:["+966","56 963 4665"]};
 const BR_CARDS=[
-  {key:"eg-10r",country:"eg",title:"العاشر من رمضان",area:"محافظة الشرقية"},
-  {key:"eg-nasr",country:"eg",title:"مدينة نصر",area:"القاهرة — منطقة عباس العقاد"},
-  {key:"sa-ryd",country:"sa",title:"الرياض",area:"منطقة معارض القادسية"}
+  {key:"eg-10r",country:"eg",title:"العاشر من رمضان",area:"المعرض — سكاي دجلة مول، العاشر من رمضان",map:"https://maps.app.goo.gl/2WLDDV6Btap64yEeA"},
+  {key:"eg-nasr",country:"eg",title:"مدينة نصر",area:"عمارة اللؤلؤة رقم 4، شارع المهندسين العسكريين، متفرع من شارع الطيران — الدور الأول، شقة 2",map:"https://maps.app.goo.gl/9EWF8uziYXGTVt4z8"},
+  {key:"sa-ryd",country:"sa",title:"الرياض",area:"معرض أفندينا — معارض القادسية، شارع وادي السرح، حي القادسية",map:"https://maps.app.goo.gl/53H6gRAoYXiS9xPLA",hours:"مواعيد الدوام: من 12 ظهراً حتى 8 مساءً"}
 ];
 for(const b of BR_CARDS){
   const p=PHONES[b.country],[cc,rest]=PRETTY[b.country];
@@ -595,7 +604,10 @@ for(const b of BR_CARDS){
   });
   $("branchList").append(h("article",{class:"b-card"},
     h("div",{class:"b-top"},h("span",{class:"b-chip"},h("i",{style:"background:"+(b.country==="eg"?"#7FB8E8":"var(--hero-gold)")}),b.country==="eg"?"مصر":"السعودية")),
-    h("h3",null,b.title),h("div",{class:"area"},b.area),
+    h("h3",null,b.title),
+    h("div",{class:"addr"},h("div",{class:"area"},b.area),
+      /^https:\/\//.test(b.map||"")?h("a",{class:"map-btn",href:b.map,target:"_blank",rel:"noopener","aria-label":"افتح لوكيشن فرع "+b.title+" على الخريطة",title:"اللوكيشن على الخريطة"},svg(ICON.pin),h("span",null,"الخريطة")):null),
+    b.hours?h("div",{class:"hours"},svg(CLOCK_ICON),b.hours):null,
     h("div",{class:"phone"},h("div",{class:"ph-text"},h("span",{class:"ph-label"},"WHATSAPP · واتساب"),num),copyBtn),
     h("div",{class:"b-actions"},h("a",{class:"btn btn-wa",href:waLink(b.country),target:"_blank",rel:"noopener"},svg(ICON.wa),"كلّمنا على واتساب"))));
 }
