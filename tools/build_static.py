@@ -18,7 +18,7 @@ desc='معرض أفندينا موتورز: سيارات كورية مفحوصة
 head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
  f'<meta name="description" content="{desc}"><meta property="og:title" content="أفندينا موتورز — معرض السيارات">'
- f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.github.io/assets/hero-kia.jpg">'
+ f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.github.io/assets/og-cover.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:type" content="website"><meta property="og:url" content="https://afandinacars.github.io/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://afandinacars.github.io/assets/og-cover.jpg"><meta name="theme-color" content="#002838"><link rel="apple-touch-icon" href="assets/logo-t.png">'
  '<link rel="icon" href="assets/logo.png">'
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
  '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "56777a6ca5a145afb55a2e568a230ffe"}\'></script>'
