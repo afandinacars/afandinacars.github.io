@@ -679,9 +679,16 @@ function photoPrice(c){
   if(e.price==null||e.price==="")return h("div",{class:"ph-price ask"},"السعر عند التواصل");
   return h("div",{class:"ph-price"},h("span",{class:"num"},fmt(e.price)),h("small",null,(CUR[e.currency]||e.currency||"")+(modeOf(c)==="sa"?" · شامل التوصيل للرياض":modeOf(c)==="eg"&&state.pricing.eg.note?" · "+state.pricing.eg.note:c.priceNote?" · "+c.priceNote:"")));
 }
+const SITE_URL="https://afandinacars.github.io/";
 function waLink(key,c){
-  const msg=c?`مرحباً أفندينا موتورز، أستفسر عن ${title(c)} ${c.trim||""} موديل ${c.year||""} — كود ${c.id}`:"مرحباً أفندينا موتورز، أريد الاستفسار عن سيارة";
-  return "https://wa.me/"+PHONES[key].wa+"?text="+encodeURIComponent(msg.replace(/\s+/g," ").trim());
+  let msg;
+  if(c){
+    const e=effPrice(c);
+    const line1=("مرحباً أفندينا موتورز، أستفسر عن "+title(c)+" "+(c.trim||"")+" موديل "+(c.year||"")).replace(/\s+/g," ").trim();
+    const line2=[c.color&&("اللون: "+c.color),(e.price!=null&&e.price!=="")?("السعر المعروض: "+fmt(e.price)+" "+(CUR[e.currency]||e.currency||"")):null].filter(Boolean).join(" — ");
+    msg=line1+"\n"+(line2?line2+"\n":"")+"كود: "+c.id+"\n"+SITE_URL+"#car-"+c.id;
+  }else msg="مرحباً أفندينا موتورز، أريد الاستفسار عن سيارة\n"+SITE_URL;
+  return "https://wa.me/"+PHONES[key].wa+"?text="+encodeURIComponent(msg);
 }
 function waBtns(c,cls){
   const b=BRANCHES[c&&c.branch]||{phone:"both"};
