@@ -95,7 +95,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .ph-price.ask{font-size:.95rem;font-weight:600}
 .badges{z-index:1}
 .ph{aspect-ratio:4/3;max-width:100%;background:var(--chip);position:relative;display:grid;place-items:center;color:var(--muted);overflow:hidden}
-.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:50% 72%;display:block}
+.ph{aspect-ratio:1/1}
 .ph svg.sil{width:70%;height:auto;opacity:.55}
 .badges{position:absolute;top:10px;inset-inline-start:10px;display:flex;gap:6px;flex-wrap:wrap}
 .badge{font-size:.75rem;font-weight:600;border-radius:999px;padding:.15rem .6rem;background:var(--surface);color:var(--ink);border:1px solid var(--line)}
@@ -251,8 +252,10 @@ dialog::backdrop{background:rgba(5,14,12,.6)}
 .dlg-head h2{font-size:1.15rem}
 .x{background:var(--chip);border:0;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1.1rem;flex:none}
 .dlg-body{padding:18px}
-.gallery .main{aspect-ratio:16/10;max-width:100%;background:var(--chip);border-radius:12px;overflow:hidden;display:grid;place-items:center}
-.gallery .main img{width:100%;height:100%;object-fit:cover}
+.gallery .main{aspect-ratio:4/5;max-height:72vh;width:100%;max-width:100%;background:#0b1419;border-radius:12px;overflow:hidden;display:grid;place-items:center;position:relative}
+.gallery .main>*{grid-area:1/1}
+.gallery .main .bg{position:absolute;inset:-20px;width:calc(100% + 40px);height:calc(100% + 40px);max-width:none;object-fit:cover;filter:blur(22px) brightness(.6);transform:scale(1.05)}
+.gallery .main .fg{position:relative;width:100%;height:100%;object-fit:contain}
 .thumbs{display:flex;gap:8px;overflow-x:auto;padding-top:8px}
 .thumbs button{border:2px solid transparent;border-radius:8px;padding:0;width:72px;height:54px;overflow:hidden;cursor:pointer;flex:none;background:var(--chip)}
 .thumbs button[aria-current="true"]{border-color:var(--accent)}
@@ -754,10 +757,11 @@ function openCar(id,fromHash){
   const c=state.cars.find(x=>x.id===id);if(!c)return;
   $("dTitle").textContent=title(c)+(c.year?" "+c.year:"");
   const photos=c.photos||[];
-  const main=h("div",{class:"main"},cover(c));
+  const show=p=>[h("img",{class:"bg",src:photoUrl(p),alt:"","aria-hidden":"true"}),h("img",{class:"fg",src:photoUrl(p),alt:title(c)})];
+  const main=h("div",{class:"main"},photos.length?show(photos[0]):cover(c));
   const thumbs=h("div",{class:"thumbs"},photos.length>1?photos.map((p,i)=>{
     const b=h("button",{type:"button","aria-current":i===0?"true":"false","aria-label":"صورة "+(i+1)},h("img",{src:photoUrl(p),alt:""}));
-    b.addEventListener("click",()=>{main.replaceChildren(h("img",{src:photoUrl(p),alt:title(c)}));thumbs.querySelectorAll("button").forEach(x=>x.setAttribute("aria-current",x===b?"true":"false"))});
+    b.addEventListener("click",()=>{main.replaceChildren(...show(p));thumbs.querySelectorAll("button").forEach(x=>x.setAttribute("aria-current",x===b?"true":"false"))});
     return b}):[]);
   const rows=[["الفئة",c.trim],["الموديل",c.year&&h("span",{class:"num"},c.year)],["الممشى",c.km!=null&&c.km!==""&&h("span",null,h("span",{class:"num"},fmt(c.km))," كم")],
     ["المحرك",c.cc&&h("span",{class:"num"},fmt(c.cc)+" cc")],["القوة",c.hp&&h("span",null,h("span",{class:"num"},c.hp)," حصان")],["الوقود",FUEL[c.fuel]],
