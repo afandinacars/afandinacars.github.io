@@ -116,6 +116,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .price small{font-family:var(--f-body);font-weight:500;color:var(--muted);font-size:.8rem}
 .card-actions{display:flex;gap:8px;margin-top:auto;padding-top:4px}
 .card-actions .btn{flex:1}
+.more-wrap{display:flex;justify-content:center;padding-bottom:2.5rem;margin-top:-1rem}
+.more-btn{min-width:220px;padding-block:.8rem}
 .empty{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
 
 /* about */
@@ -368,6 +370,7 @@ dl.spec dd{font-weight:500}
     </div>
     <div class="result-line"><span id="count"></span></div>
     <section class="grid" id="grid" aria-live="polite"></section>
+    <div class="more-wrap" id="moreWrap" hidden><button class="btn btn-line more-btn" id="moreBtn" type="button">عرض المزيد</button></div>
   </main>
   <section class="about" id="about" aria-labelledby="aboutTitle">
     <div class="wrap about-grid">
@@ -511,7 +514,7 @@ dl.spec dd{font-weight:500}
     <div class="dlg-body" id="mBody"></div>
   </dialog>
 </template>
-<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":null,"body":"suv","cc":null,"hp":null,"fuel":"","trans":"","drive":"","seats":null,"color":"أبيض","interior":"بني (كاميل)","inspection":"","branch":"eg-10r","status":"available","price":null,"currency":"EGP","krw":null,"auto":false,"note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات: سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af"},{"id":"bd781a83b6c520106a20424444410360"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3"},{"id":"eca45726c385d3aa11df32fff9e9bad4"},{"id":"6c90938c17bcc32f91354805bc3a1658"},{"id":"e00ef68850417dc829a5e86c152dbbd7"},{"id":"04026d96f1ed17ab4564c78dca68f8cc"},{"id":"9a3e6c537478fc6db459b5b9815d3b23"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f"},{"id":"d1acf962fad575d6654451af18c972db"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c"},{"id":"abe5f8f7bbbb54852eb0e97e12767bc7"}],"added":6}],"pricing":{"krwPerUsd":1324.27,"sarPerUsd":3.75,"shipKorea":2850,"shipSaudi":1000,"clearance":1000,"customsPct":5,"vatPct":15,"marginUsd":600,"roundSar":1,"xeRate":1344.27,"fxBufferPct":0,"fxBufferKrw":20,"rateUpdated":"2026-11-25 20:29 UTC","rateSource":"XE mid-market","eg":{"shipping":2450,"clearance":1000,"commission":900,"egpPerUsd":null,"roundTo":1,"note":""}}}</script>
+<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":0,"body":"suv","cc":1600,"hp":240,"fuel":"hybrid","trans":"","drive":"fwd","seats":7,"color":"أبيض","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","krw":null,"auto":false,"note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af","t":"8bda9a3cb3f14383ca7bf97d593104a9"},{"id":"bd781a83b6c520106a20424444410360","t":"4022526edcb5d9b8a8e27a04df5efa82"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3","t":"a9c3b75fcfed76462437f89c9b3defb4"},{"id":"eca45726c385d3aa11df32fff9e9bad4","t":"547716cc34dd8b7dabc211e676da5f45"},{"id":"6c90938c17bcc32f91354805bc3a1658","t":"63288d042c72023666791469cd5c76e0"},{"id":"e00ef68850417dc829a5e86c152dbbd7","t":"cd3f347555986f1f9a504638ca0ba636"},{"id":"04026d96f1ed17ab4564c78dca68f8cc","t":"a1a3c783730215d336d9f8c3a9e2fd80"},{"id":"9a3e6c537478fc6db459b5b9815d3b23","t":"733c426de7b95fde56195211902ba2f7"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7","t":"f7ac90235611870c60451c55540ea1dc"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332","t":"a104c078c34af16d09dbc36a3ebc497b"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f","t":"ab951c7f2eff8f9c62d63874cb3b1e9d"},{"id":"d1acf962fad575d6654451af18c972db","t":"c47825fbf8f03dd7fda72971f744b9ce"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c","t":"531f8bbafe288d2847aeaf4f903e063f"}],"added":6,"sample":false}],"pricing":{"krwPerUsd":1324.27,"sarPerUsd":3.75,"shipKorea":2850,"shipSaudi":1000,"clearance":1000,"customsPct":5,"vatPct":15,"marginUsd":600,"roundSar":1,"xeRate":1344.27,"fxBufferPct":0,"fxBufferKrw":20,"rateUpdated":"2026-11-25 20:29 UTC","rateSource":"XE mid-market","eg":{"shipping":2450,"clearance":1000,"commission":900,"egpPerUsd":null,"roundTo":1,"note":""}}}</script>
 <div id="app"></div>
 <script id="main">
 (function(){
@@ -594,7 +597,9 @@ ICON.hatch=ICON.sedan;ICON.pickup=ICON.suv;
 
 const fmt=n=>Number(n).toLocaleString("en-US");
 const title=c=>[c.brand,c.model].filter(Boolean).join(" ");
+const PAGE=24;let shown=PAGE;
 const photoUrl=p=>p&&p.id?"assets/cars/"+encodeURIComponent(p.id)+".jpg":"";
+const thumbUrl=p=>p&&(p.t||p.id)?"assets/cars/"+encodeURIComponent(p.t||p.id)+".jpg":"";
 function effPrice(c){
   const m=modeOf(c);
   if(m==="sa"){const r=calcSaudi(c.krw,state.pricing);return {price:r?r.sar:null,currency:"SAR"}}
@@ -623,7 +628,7 @@ function waBtns(c,cls){
 function statusBadge(c){const cls={available:"av",reserved:"rs",sold:"sd"}[c.status]||"av";return h("span",{class:"badge "+cls},STATUS[c.status]||"متاحة")}
 function cover(c){
   const p=(c.photos||[])[0];
-  if(p)return h("img",{src:photoUrl(p),alt:title(c),loading:"lazy"});
+  if(p)return h("img",{src:thumbUrl(p),alt:title(c),loading:"lazy"});
   return svg(ICON[c.body]||ICON.suv,"sil");
 }
 
@@ -641,7 +646,7 @@ function refreshBrandOptions(){
 }
 fillSelect($("fBody"),Object.entries(BODY));
 fillSelect($("fBranch"),Object.entries(BRANCHES).map(([k,v])=>[k,v.short]));
-for(const id of ["q","fBrand","fBody","fBranch","fSort","fSold"])$(id).addEventListener("input",render);
+for(const id of ["q","fBrand","fBody","fBranch","fSort","fSold"])$(id).addEventListener("input",()=>{shown=PAGE;render()});
 
 function filtered(){
   const q=$("q").value.trim().toLowerCase(),br=$("fBrand").value,bd=$("fBody").value,loc=$("fBranch").value,sold=$("fSold").checked;
@@ -675,10 +680,12 @@ function card(c){
 }
 
 function render(){
-  const list=filtered();
+  const all=filtered(),list=all.slice(0,shown);
   const grid=$("grid");
   grid.replaceChildren(...(list.length?list.map(card):[h("div",{class:"empty"},state.cars.length?($("fBrand").value?"مفيش "+$("fBrand").value+" معروضة دلوقتي، بس نقدر نجيبهالك من كوريا. ابعتلنا المواصفات على واتساب.":"مفيش عربيات بالمواصفات دي حالياً. ابعتلنا على واتساب وإحنا نجيبهالك من كوريا."):"لسه مفيش عربيات معروضة. تابعنا أو كلمنا على واتساب.")]));
-  $("count").textContent=list.length+" سيارة معروضة";
+  $("count").textContent=all.length+" سيارة معروضة";
+  const more=$("moreWrap");more.hidden=all.length<=shown;
+  $("moreBtn").textContent="عرض المزيد ("+(all.length-shown)+" سيارة)";
   const avail=state.cars.filter(c=>c.status==="available");
   $("stats").replaceChildren(
     h("div",null,h("b",null,avail.length),h("span",null,"سيارة متاحة الآن")),
@@ -760,7 +767,7 @@ function openCar(id,fromHash){
   const show=p=>[h("img",{class:"bg",src:photoUrl(p),alt:"","aria-hidden":"true"}),h("img",{class:"fg",src:photoUrl(p),alt:title(c)})];
   const main=h("div",{class:"main"},photos.length?show(photos[0]):cover(c));
   const thumbs=h("div",{class:"thumbs"},photos.length>1?photos.map((p,i)=>{
-    const b=h("button",{type:"button","aria-current":i===0?"true":"false","aria-label":"صورة "+(i+1)},h("img",{src:photoUrl(p),alt:""}));
+    const b=h("button",{type:"button","aria-current":i===0?"true":"false","aria-label":"صورة "+(i+1)},h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}));
     b.addEventListener("click",()=>{main.replaceChildren(...show(p));thumbs.querySelectorAll("button").forEach(x=>x.setAttribute("aria-current",x===b?"true":"false"))});
     return b}):[]);
   const rows=[["الفئة",c.trim],["الموديل",c.year&&h("span",{class:"num"},c.year)],["الممشى",c.km!=null&&c.km!==""&&h("span",null,h("span",{class:"num"},fmt(c.km))," كم")],
@@ -787,6 +794,7 @@ for(const d of document.querySelectorAll("dialog"))d.addEventListener("click",e=
 
 function toast(msg,ms){const t=h("div",{class:"toast",role:"status"},msg);document.body.append(t);setTimeout(()=>t.remove(),ms||2600)}
 
+$("moreBtn").addEventListener("click",()=>{const before=document.querySelectorAll("#grid .card").length;shown+=PAGE;render();const cards=document.querySelectorAll("#grid .card");setupReveal($("grid"));if(cards[before])cards[before].querySelector(".ph-link")?.focus({preventScroll:true})});
 refreshBrandOptions();render();fromHash();setupReveal();
 
 /* ---------- admin ---------- */
@@ -841,6 +849,8 @@ function buildDoc(){
     +'<script type="application/json" id="inventory">'+json+'<\/script>\n<div id="app"></div>\n'
     +document.getElementById("main").outerHTML+'</body></html>';
 }
+function photoIds(list){const out=[];for(const p of list||[]){if(p&&p.id)out.push(p.id);if(p&&p.t)out.push(p.t)}return out}
+async function dropAssets(ids){if(!assetsApi||!ids.length)return;for(const id of ids){try{await assetsApi.delete(id)}catch(e){}}}
 async function save(){
   if(!artifactApi||busy)return false;
   busy=true;
@@ -861,15 +871,16 @@ function renderPhotos(){
     rm.addEventListener("click",()=>{draftPhotos.splice(i,1);renderPhotos()});
     const first=i>0?h("button",{type:"button",style:"top:auto;bottom:3px;inset-inline-end:auto;inset-inline-start:3px"},"غلاف"):h("span",{class:"first"},"الغلاف");
     if(i>0)first.addEventListener("click",()=>{draftPhotos.unshift(draftPhotos.splice(i,1)[0]);renderPhotos()});
-    return h("div",{class:"photo"},h("img",{src:photoUrl(p),alt:""}),rm,first);
+    return h("div",{class:"photo"},h("img",{src:thumbUrl(p),alt:""}),rm,first);
   }));
 }
-async function shrink(file){
+async function shrink(file,max,q){
+  max=max||1600;q=q||.82;
   try{
-    const bmp=await createImageBitmap(file);const s=Math.min(1,1600/Math.max(bmp.width,bmp.height));
+    const bmp=await createImageBitmap(file);const s=Math.min(1,max/Math.max(bmp.width,bmp.height));
     const cv=document.createElement("canvas");cv.width=Math.round(bmp.width*s);cv.height=Math.round(bmp.height*s);
     cv.getContext("2d").drawImage(bmp,0,0,cv.width,cv.height);
-    return await new Promise(r=>cv.toBlob(b=>r(b||file),"image/jpeg",.82));
+    return await new Promise(r=>cv.toBlob(b=>r(b||file),"image/jpeg",q));
   }catch(e){return file}
 }
 $("e-file").addEventListener("change",async e=>{
@@ -877,7 +888,7 @@ $("e-file").addEventListener("change",async e=>{
   if(!assetsApi){$("e-upmsg").textContent="رفع الصور متاح للمحررين فقط.";return}
   for(let i=0;i<files.length;i++){
     $("e-upmsg").textContent="جاري رفع "+(i+1)+" من "+files.length+"…";
-    try{const blob=await shrink(files[i]);const r=await assetsApi.upload(blob);draftPhotos.push({id:r.id});renderPhotos()}
+    try{const blob=await shrink(files[i]);const r=await assetsApi.upload(blob);let t=null;try{const tb=await shrink(files[i],480,.72);t=(await assetsApi.upload(tb)).id}catch(e){}draftPhotos.push(t?{id:r.id,t}:{id:r.id});renderPhotos()}
     catch(err){$("e-upmsg").textContent="صورة ما اترفعتش ("+((err&&err.code)||"خطأ")+")";}
   }
   if(/جاري/.test($("e-upmsg").textContent))$("e-upmsg").textContent="";
@@ -906,10 +917,12 @@ $("saveCar").addEventListener("click",async()=>{
     data.price=null;data.currency=mode==="sa"?"SAR":"USD";
   }
   const before=JSON.stringify(state);
+  const removed=editing?photoIds(editing.photos).filter(id=>!photoIds(draftPhotos).includes(id)):[];
   if(editing){Object.assign(editing,data,{photos:draftPhotos,sample:false})}
   else{const maxAdded=state.cars.reduce((m,c)=>Math.max(m,c.added||0),0);
     state.cars.push(Object.assign({id:"c"+Date.now().toString(36)},data,{photos:draftPhotos,added:maxAdded+1}))}
   $("saveCar").disabled=true;$("e-msg").textContent="";
+  if(removed.length)await dropAssets(removed);
   const ok=await save();
   $("saveCar").disabled=false;
   if(!ok){state=JSON.parse(before)}else{$("editor").close()}
@@ -924,6 +937,8 @@ function openManager(){
     del.addEventListener("click",async()=>{
       if(!armed){armed=true;del.textContent="تأكيد الحذف";setTimeout(()=>{armed=false;del.textContent="حذف"},4000);return}
       const before=JSON.stringify(state);
+      del.disabled=true;del.textContent="جاري الحذف…";
+      await dropAssets(photoIds(c.photos));
       state.cars=state.cars.filter(x=>x.id!==c.id);
       if(!(await save()))state=JSON.parse(before);
       refreshBrandOptions();render();openManager();

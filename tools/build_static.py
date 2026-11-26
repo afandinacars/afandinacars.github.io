@@ -12,6 +12,7 @@ KNOWN={"f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","c609bd84c88433314a1
 "0e99f9110f08e3ba07e3c220ecff476e":"assets/hero-kia.jpg","4da07f430d881867717866663b27b1dd":"assets/hero-hyundai.jpg","6dc41e5ecf90127c52759db6d298104d":"assets/hero-amg.jpg"}
 for k,v in KNOWN.items(): s=s.replace('/_blob/'+k,v)
 s=s.replace('const photoUrl=p=>p&&p.id?"/_blob/"+encodeURIComponent(p.id):"";','const photoUrl=p=>p&&p.id?"assets/cars/"+encodeURIComponent(p.id)+".jpg":"";')
+s=s.replace('const thumbUrl=p=>p&&(p.t||p.id)?"/_blob/"+encodeURIComponent(p.t||p.id):"";','const thumbUrl=p=>p&&(p.t||p.id)?"assets/cars/"+encodeURIComponent(p.t||p.id)+".jpg":"";')
 assert '/_blob/' not in s.split('<script id="main">')[0], 'unmapped blob in markup'
 desc='معرض أفندينا موتورز: سيارات كورية مفحوصة متاحة في مصر والسعودية — كيا، هيونداي، جينيسيس وغيرها. تواصل على واتساب.'
 head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
@@ -26,4 +27,4 @@ os.makedirs(os.path.join(repo,'assets','cars'),exist_ok=True)
 open(os.path.join(repo,'index.html'),'w',encoding='utf-8').write(out)
 open(os.path.join(repo,'.nojekyll'),'w').write('')
 inv=json.loads(re.search(r'<script type="application/json" id="inventory">(.*?)</script>',s,re.S).group(1).replace('\\u003c','<'))
-print(json.dumps(sorted({p['id'] for c in inv['cars'] for p in c.get('photos',[])})))
+print(json.dumps(sorted({x for c in inv['cars'] for p in c.get('photos',[]) for x in (p.get('id'),p.get('t')) if x})))
