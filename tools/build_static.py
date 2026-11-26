@@ -8,7 +8,7 @@ s=open(src,encoding='utf-8').read()
 i=s.find('<title>'); 
 if i>0: s=s[i:]
 s=re.sub(r'</body></html>\s*$','',s)
-KNOWN={"f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","cdb8170f55023d47599e147bc23f4ff5":"assets/hero-bmw.jpg",
+KNOWN={"f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","c609bd84c88433314a1323d4fdd3fff5":"assets/logo-t.png","cdb8170f55023d47599e147bc23f4ff5":"assets/hero-bmw.jpg",
 "0e99f9110f08e3ba07e3c220ecff476e":"assets/hero-kia.jpg","4da07f430d881867717866663b27b1dd":"assets/hero-hyundai.jpg","6dc41e5ecf90127c52759db6d298104d":"assets/hero-amg.jpg"}
 for k,v in KNOWN.items(): s=s.replace('/_blob/'+k,v)
 s=s.replace('const photoUrl=p=>p&&p.id?"/_blob/"+encodeURIComponent(p.id):"";','const photoUrl=p=>p&&p.id?"assets/cars/"+encodeURIComponent(p.id)+".jpg":"";')
