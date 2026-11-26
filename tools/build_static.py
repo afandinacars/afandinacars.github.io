@@ -21,6 +21,7 @@ head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.github.io/assets/hero-kia.jpg">'
  '<link rel="icon" href="assets/logo.png">'
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
+ '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "56777a6ca5a145afb55a2e568a230ffe"}\'></script>'
  '</head><body>')
 out=head+s+'</body></html>'
 os.makedirs(os.path.join(repo,'assets','cars'),exist_ok=True)
