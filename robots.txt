@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://afandinacars.github.io/sitemap.xml
