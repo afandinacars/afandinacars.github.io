@@ -8,6 +8,40 @@ s=open(src,encoding='utf-8').read()
 i=s.find('<title>'); 
 if i>0: s=s[i:]
 s=re.sub(r'</body></html>\s*$','',s)
+# --- keep internal pricing out of the public copy: work out each final price here,
+# then drop Korea prices, formulas, margins and commissions from the published data.
+import math
+def _r(x): return int(math.floor(x+0.5))
+def _int(x): return int(x) if float(x).is_integer() else x
+def _num(v,d=0):
+    try: return float(v) if v not in (None,"") else d
+    except: return d
+def _public_inventory(html):
+    pat=r'(<script type="application/json" id="inventory">)(.*?)(</script>)'
+    m=re.search(pat,html,re.S); inv=json.loads(m.group(2).replace('\\u003c','<'))
+    P=inv.get('pricing') or {}; E=P.get('eg') or {}
+    for c in inv.get('cars',[]):
+        mode='eg' if c.get('auto')=='eg' else ('sa' if c.get('auto') else '')
+        krw=_num(c.get('krw')); rate=_num(P.get('krwPerUsd'))
+        if mode and krw and rate:
+            car=krw/rate
+            if mode=='sa':
+                usd=car+_num(P.get('shipKorea'))+car*_num(P.get('customsPct'))/100+car*_num(P.get('vatPct'))/100+_num(P.get('shipSaudi'))+_num(P.get('clearance'))+_num(P.get('marginUsd'))
+                r=_num(P.get('roundSar'),1) or 1
+                c['price']=_int(_r(usd*_num(P.get('sarPerUsd'),3.75)/r)*r); c['currency']='SAR'; c['priceNote']='شامل التوصيل للرياض'
+            else:
+                usd=car+_num(E.get('shipping'))+_num(E.get('clearance'))+_num(E.get('commission'))
+                r=_num(E.get('roundTo'),1) or 1; egp=_num(E.get('egpPerUsd'))
+                if egp>0: c['price']=_int(_r(usd*egp/r)*r); c['currency']='EGP'
+                else: c['price']=_int(_r(usd/r)*r); c['currency']='USD'
+                if E.get('note'): c['priceNote']=E['note']
+        elif mode:
+            c['price']=None
+        for k in ('krw','auto'): c.pop(k,None)
+    inv['pricing']={}
+    js=json.dumps(inv,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
+    return re.sub(pat,lambda mm:mm.group(1)+js+mm.group(3),html,count=1,flags=re.S)
+s=_public_inventory(s)
 KNOWN={"f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","c609bd84c88433314a1323d4fdd3fff5":"assets/logo-t.png","cdb8170f55023d47599e147bc23f4ff5":"assets/hero-bmw.jpg",
 "0e99f9110f08e3ba07e3c220ecff476e":"assets/hero-kia.jpg","4da07f430d881867717866663b27b1dd":"assets/hero-hyundai.jpg","6dc41e5ecf90127c52759db6d298104d":"assets/hero-amg.jpg"}
 for k,v in KNOWN.items(): s=s.replace('/_blob/'+k,v)
