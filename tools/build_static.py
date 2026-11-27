@@ -67,6 +67,14 @@ def _public_inventory(html):
             c['price']=None
         for k in ('krw','auto'): c.pop(k,None)
     inv['pricing']={}
+    # order tracking: publish only a SHA-256 of each order code (never the code or the customer's name)
+    import hashlib
+    _o=[]
+    for o in inv.get('orders') or []:
+        code=re.sub(r'[^A-Z0-9]','',str(o.get('code') or '').upper())
+        if len(code)<6: continue
+        _o.append({'h':hashlib.sha256(code.encode()).hexdigest(),'car':o.get('car') or '','country':o.get('country') or 'eg','stage':o.get('stage') or 0,'dates':o.get('dates') or {},'eta':o.get('eta') or '','note':o.get('note') or ''})
+    inv['orders']=_o
     js=json.dumps(inv,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     return re.sub(pat,lambda mm:mm.group(1)+js+mm.group(3),html,count=1,flags=re.S)
 s=_public_inventory(s)
@@ -97,7 +105,16 @@ head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
  '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "a8d65ec403f14ea3a96d7f4250d69be2"}\'></script>'
  '</head><body>')
-out=head+s+'</body></html>'
+# --- count WhatsApp taps per car: each tap is recorded by Cloudflare Web Analytics as a visit to
+# /go/wa/<car-id>/<eg|sa>/ (or /go/wa/general/...), then the address goes back to what it was.
+_WA_TRACK=r"""<script>
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href^="https://wa.me/"]');if(!a)return;
+try{var href=decodeURIComponent(a.getAttribute("href")),m=href.match(/\u0643\u0648\u062f: ([A-Za-z0-9-]+)/),cc=/wa\.me\/966/.test(href)?"sa":"eg";
+var back=location.pathname+location.search+location.hash,st=history.state;
+history.pushState(st,"","/go/wa/"+(m?m[1]:"general")+"/"+cc+"/");
+setTimeout(function(){if(location.pathname.indexOf("/go/wa/")===0)history.replaceState(st,"",back)},1500)}catch(_){}},true);
+</script>"""
+out=head+s+_WA_TRACK+'</body></html>'
 os.makedirs(os.path.join(repo,'assets','cars'),exist_ok=True)
 open(os.path.join(repo,'index.html'),'w',encoding='utf-8').write(out)
 open(os.path.join(repo,'.nojekyll'),'w').write('')

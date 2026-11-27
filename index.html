@@ -501,6 +501,7 @@ dl.spec dd{font-weight:500}
 .tn-wa{flex:none;padding:.5rem .9rem}
 .tn-wa svg{width:18px;height:18px}
 @media (max-width:440px){.tn-links a[href="#request"]{display:none}}
+@media (max-width:440px){.tn-links:has(#tnTrack:not([hidden])) a[href="#reviews"]{display:none}}
 @media (max-width:560px){.tn-links a{padding:.4rem .55rem;font-size:.85rem}.tn-wa span{display:none}.tn-wa{padding:.55rem}.tn-logo img{height:38px}}
 body:has(dialog[open]) .topnav{transform:translateY(-110%)}
 html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
@@ -515,6 +516,47 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
   :root:not([data-theme="light"]) .rv-btn{background:rgba(229,236,240,.92)}}
 :root[data-theme="dark"] .tool{background:rgba(17,29,37,.88);color:#E5ECF0}
 :root[data-theme="dark"] .card{box-shadow:none}
+
+/* Saudi price: what it includes */
+.incl{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.incl span{display:inline-flex;align-items:center;gap:4px;font-size:.8rem;background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok);border-radius:999px;padding:.15rem .6rem;font-weight:600}
+.incl b{font-weight:600;color:var(--muted);font-size:.8rem;align-self:center}
+/* order tracking */
+.track{background:var(--hero-bg);color:var(--hero-ink);padding-block:3rem 3.25rem;scroll-margin-top:12px;position:relative;overflow:hidden}
+.track::before{content:"";position:absolute;inset:0;background:radial-gradient(800px 300px at 85% 0%,rgba(226,184,90,.14),transparent 70%);pointer-events:none}
+.track .wrap{position:relative}
+.track h2{font-size:clamp(2rem,5vw,3rem);font-weight:800;margin-top:.6rem}
+.track .eyebrow{color:var(--hero-gold);font-size:.95rem}
+.track .lead{color:var(--hero-muted);font-size:1.05rem;max-width:56ch;margin:.7rem 0 0}
+.tr-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:1.4rem;max-width:560px}
+.tr-form input{flex:1 1 220px;min-width:0;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:12px;padding:.85rem 1rem;font-size:1.05rem;font-family:var(--f-mono);letter-spacing:.08em;direction:ltr;text-align:center}
+.tr-form input::placeholder{color:rgba(255,255,255,.45);letter-spacing:.04em}
+.tr-form .btn{padding:.85rem 1.4rem}
+.tr-msg{margin-top:.8rem;color:#F1CB72;min-height:1.4em}
+.tr-card{margin-top:1.2rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px;max-width:760px}
+.tr-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.tr-head b{font-family:var(--f-display);font-size:1.25rem}
+.tr-head span{color:var(--hero-muted);font-size:.88rem}
+.tr-steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:0}
+.tr-steps li{display:grid;grid-template-columns:32px 1fr;gap:12px;position:relative;padding-bottom:16px}
+.tr-steps li:last-child{padding-bottom:0}
+.tr-steps li::before{content:"";position:absolute;inset-inline-start:15px;top:30px;bottom:0;width:2px;background:rgba(255,255,255,.15)}
+.tr-steps li:last-child::before{display:none}
+.tr-steps li.done::before{background:var(--hero-gold)}
+.tr-dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:2px solid rgba(255,255,255,.25);font-size:.85rem;font-weight:700;z-index:1;background:var(--hero-bg)}
+.tr-steps li.done .tr-dot{background:var(--hero-gold);border-color:var(--hero-gold);color:var(--hero-bg)}
+.tr-steps li.now .tr-dot{border-color:var(--hero-gold);color:var(--hero-gold);box-shadow:0 0 0 5px rgba(226,184,90,.18)}
+.tr-steps li b{display:block;padding-top:4px}
+.tr-steps li small{color:var(--hero-muted);font-size:.85rem}
+.tr-steps li:not(.done):not(.now){opacity:.55}
+.tr-note{margin-top:12px;background:rgba(255,255,255,.06);border-radius:10px;padding:10px 12px;font-size:.92rem;white-space:pre-wrap}
+.tr-eta{margin-top:10px;color:#F1CB72;font-weight:600}
+.or-row{display:grid;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.or-row .or-top{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.or-row code{font-family:var(--f-mono);background:var(--chip);border-radius:6px;padding:.1rem .45rem;direction:ltr}
+.or-row .or-top b{flex:1 1 160px}
+.or-row .or-ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.or-row select,.or-row input{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.35rem .5rem;color:var(--ink);min-width:0}
 </style>
 <template id="shell">
   <div class="admin-bar" id="adminBar" hidden="">
@@ -535,6 +577,7 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
         <a href="#cars">العربيات</a>
         <a href="#reviews" id="tnReviews" hidden="">آراء العملاء</a>
         <a href="#request">اطلب عربية</a>
+        <a href="#track" id="tnTrack" hidden="">تتبّع طلبك</a>
         <a href="#branches">الفروع</a>
       </div>
       <button class="btn btn-wa tn-wa" type="button" id="tnWa" aria-label="كلّمنا على واتساب"></button>
@@ -551,6 +594,7 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
       <div class="topbar">
         <div class="brand"><img src="assets/logo-t.webp" alt="أفندينا موتورز — AFANDINA" width="420" height="446"></div>
         <nav class="top-links" aria-label="روابط سريعة">
+          <a class="btn btn-ghost btn-sm" href="#track" id="heroTrack" hidden=""><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><circle cx="7" cy="17.5" r="1.8" fill="currentColor"></circle><circle cx="17" cy="17.5" r="1.8" fill="currentColor"></circle></svg>تتبّع طلبك</a>
           <a class="btn btn-ghost btn-sm" href="#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="7.6" r="1.25" fill="currentColor"></circle></svg>من نحن</a>
           <a class="btn btn-ghost btn-sm" href="#branches"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"></path></svg>الفروع والتواصل</a>
         </nav>
@@ -658,6 +702,19 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
       </ol>
     </div>
   </section>
+  <section class="track" id="track" hidden="" aria-labelledby="trTitle">
+    <div class="wrap">
+      <span class="eyebrow"><span class="en">TRACKING</span><span aria-hidden="true">·</span><span>تتبّع طلبك</span></span>
+      <h2 id="trTitle">عربيتك وصلت لفين؟</h2>
+      <p class="lead">اكتب كود الطلب اللي وصلك على واتساب، وشوف عربيتك في أنهي مرحلة من كوريا لحد ما تستلمها.</p>
+      <form class="tr-form" id="trForm" novalidate="">
+        <input id="trCode" placeholder="AF-XXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="كود الطلب" maxlength="12">
+        <button class="btn btn-accent" type="submit">تتبّع</button>
+      </form>
+      <div class="tr-msg" id="trMsg" role="status"></div>
+      <div id="trOut"></div>
+    </div>
+  </section>
   <section class="branches" id="branches">
     <div class="wrap">
       <div class="br-head">
@@ -706,6 +763,7 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
         <a href="#about">من نحن</a>
         <a href="#how">إزاي بنشتغل</a>
         <a href="#request">اطلب عربية</a>
+        <a href="#track" id="ftTrack" hidden="">تتبّع طلبك</a>
         <a href="#branches">الفروع والتواصل</a>
       </nav>
     </div>
@@ -803,7 +861,7 @@ html{scroll-padding-top:calc(72px + env(safe-area-inset-top,0px))}
     <div class="dlg-body" id="mBody"></div>
   </dialog>
 </template>
-<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أبيض","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af","t":"8bda9a3cb3f14383ca7bf97d593104a9"},{"id":"bd781a83b6c520106a20424444410360","t":"4022526edcb5d9b8a8e27a04df5efa82"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3","t":"a9c3b75fcfed76462437f89c9b3defb4"},{"id":"eca45726c385d3aa11df32fff9e9bad4","t":"547716cc34dd8b7dabc211e676da5f45"},{"id":"6c90938c17bcc32f91354805bc3a1658","t":"63288d042c72023666791469cd5c76e0"},{"id":"e00ef68850417dc829a5e86c152dbbd7","t":"cd3f347555986f1f9a504638ca0ba636"},{"id":"04026d96f1ed17ab4564c78dca68f8cc","t":"a1a3c783730215d336d9f8c3a9e2fd80"},{"id":"9a3e6c537478fc6db459b5b9815d3b23","t":"733c426de7b95fde56195211902ba2f7"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7","t":"f7ac90235611870c60451c55540ea1dc"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332","t":"a104c078c34af16d09dbc36a3ebc497b"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f","t":"ab951c7f2eff8f9c62d63874cb3b1e9d"},{"id":"d1acf962fad575d6654451af18c972db","t":"c47825fbf8f03dd7fda72971f744b9ce"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c","t":"531f8bbafe288d2847aeaf4f903e063f"}],"added":6,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-green","brand":"Kia","model":"Sorento","trim":"x line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أخضر زيتي","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، كاميرات 360، ستائر شمس للأبواب الخلفية.","photos":[{"id":"43ab95d44a27b2aa62948ddee682f586","t":"8c3022111807f1dc4c4c7ed20efb70a6"},{"id":"0aaef93264c398697526783381b3a6cd","t":"fecd2752dbb50686f44e654bbcdb900a"},{"id":"3b6bdda81fc632f7f0907ad8fbe4f626","t":"9772373f0d47af949edbeb78b187819a"},{"id":"4866fb884111f42f9c29c7d861e7846a","t":"dcece3feff65d9f3cd8e6848f90fd07b"},{"id":"f56c2d4661faee4006a6db72feac4523","t":"896d72e0ebb58074ac53c572273da8f6"},{"id":"f93dc6342b482f538e815741ba7911a4","t":"6afa0d790aebcb2655f809a569b7a3af"},{"id":"d22748db71db97d556792074ff137671","t":"6ecd58f239ab9693bbc9ffdbf0c0f961"},{"id":"730b92ce46c4b7d13092009b5ff82cb2","t":"b30196e9608fbaba8caafefd9b73e574"},{"id":"d711773c8213b4c2767aaf21b037611b","t":"f9ac1761d4a41fc93bdc59c97e3e2136"},{"id":"5990f2741a6e65a27c4df7dac93fab32","t":"83d9038c8da61c8f8f4f8dc38f929dcd"},{"id":"3588814c7c28ea8f6bc8b3eb4ffbca93","t":"efee15a43e164671ddc9d78aa4550f2d"}],"added":7,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-gray","brand":"Kia","model":"Sorento","trim":"X-Line","year":2027,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"عسلي (بركاني )","interior":"بني (كاميل)","inspection":"","branch":"kr","status":"available","price":48905,"currency":"USD","note":"العربية في كوريا وجاهزة للشحن لمصر أو السعودية.\n\nSORENTO 2027 X LINE \n الكماليات: سقف بانوراما، فرش جلد بني، شاشتين منحنيتين، شاشة عرض على الزجاج (HUD)، صف تالت (7 ركاب).","photos":[{"id":"a86e667fb2fdc34e46c632fde44c3a81","t":"32fb87f4869fe47ef7ac3c6a41e3a381"},{"id":"9aca2f90ad04a27f35ca40a603ba41f0","t":"e2d2d86b78c4584f304621064a4209ef"},{"id":"91438884c2889c0ce544e17de9f73b71","t":"5e985dd15c53e464975ec27be749918a"},{"id":"c8161944109e314e990411181382bdf6","t":"bb17dce991a67a0b4e634c4499c20da4"},{"id":"4b48b09fa577697e55c0470f2b360742","t":"730b98d19733da38442a898c67ba6acd"},{"id":"3647b690c1456adef0c747eb6f541054","t":"34cc555d21750367375bf9186027fd7f"},{"id":"84c044e781dec12e19aad0eaaaede2e7","t":"199b28bb9a527ce0ec60aa67fae49236"},{"id":"e06482425afb95ff50fd22cbb69a7452","t":"ec5ffa36703f1c22763e95b4d703803b"},{"id":"394d9fcbea8f21b05cc1e2660db5a66a","t":"3f6c6b1c0e75e916f855031bd5e53bbf"},{"id":"63a2b91f5e5140f7e9eef13d9ced2759","t":"9b8326f2df48a5587655b11df7c17afb"}],"added":8,"sample":false,"addedAt":"2026-11-27","video":"https://youtu.be/E3MGYYoGwWs?si=Mim_baWidiahU3V1","report":[],"prices":{"eg":{"price":48905,"currency":"USD","note":""},"sa":{"price":220936,"currency":"SAR","note":"شامل التوصيل للرياض"}}}],"pricing":{},"reviews":[{"id":"rmwz70sgd","url":"https://youtu.be/ilre8GhLcEQ?si=8UzHtFGWj9sMQQli","name":"د. عمرو بن عدنان","city":"المدينة المنورة","car":"جينيسيس GV80 2024 فل أوبشن","quote":"الشركة الراقية المهنية المحترمة"},{"id":"rmwz7dsmu","url":"https://youtu.be/SRM9uvauUQI?si=zGuOfpX6dHTfXz8p","name":"م. محمد إمام","city":"الرياض","car":"كيا سورينتو 2024","quote":"بتحس إنهم بيتعاملوا معاك كأخ مش عميل"},{"id":"rmwz6ed1g","url":"https://youtu.be/4Cc39bdre0E?si=UElwtiJdG498LipH","name":"م. أحمد","city":"القاهرة","car":"كيا سورينتو 2024","quote":"أنا مرتاح ليكم من زمان"},{"id":"rmwz6umpz","url":"https://youtu.be/j9EghVLRr9s?si=qlkZfQfvcy2KmIZb","name":"م. وفيق","city":"التجمع الخامس","car":"كيا K5 2026","quote":"الموضوع باختصار منظومة عارفها إزاي بتقدّم الخدمة بأفضل الطرق"},{"id":"rmwz5pk8e","url":"https://youtube.com/shorts/BuVXWx4UbQc?si=QCVZeKMJOSJ7wv6G","name":"م. محمد","city":"كفر الشيخ","car":"كيا سبورتاج 2026","quote":"أنا وثقت في شركة أفندينا إنها تصمم لي السيارة من المصنع"}]}</script>
+<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أبيض","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af","t":"8bda9a3cb3f14383ca7bf97d593104a9"},{"id":"bd781a83b6c520106a20424444410360","t":"4022526edcb5d9b8a8e27a04df5efa82"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3","t":"a9c3b75fcfed76462437f89c9b3defb4"},{"id":"eca45726c385d3aa11df32fff9e9bad4","t":"547716cc34dd8b7dabc211e676da5f45"},{"id":"6c90938c17bcc32f91354805bc3a1658","t":"63288d042c72023666791469cd5c76e0"},{"id":"e00ef68850417dc829a5e86c152dbbd7","t":"cd3f347555986f1f9a504638ca0ba636"},{"id":"04026d96f1ed17ab4564c78dca68f8cc","t":"a1a3c783730215d336d9f8c3a9e2fd80"},{"id":"9a3e6c537478fc6db459b5b9815d3b23","t":"733c426de7b95fde56195211902ba2f7"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7","t":"f7ac90235611870c60451c55540ea1dc"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332","t":"a104c078c34af16d09dbc36a3ebc497b"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f","t":"ab951c7f2eff8f9c62d63874cb3b1e9d"},{"id":"d1acf962fad575d6654451af18c972db","t":"c47825fbf8f03dd7fda72971f744b9ce"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c","t":"531f8bbafe288d2847aeaf4f903e063f"}],"added":6,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-green","brand":"Kia","model":"Sorento","trim":"x line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أخضر زيتي","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، كاميرات 360، ستائر شمس للأبواب الخلفية.","photos":[{"id":"43ab95d44a27b2aa62948ddee682f586","t":"8c3022111807f1dc4c4c7ed20efb70a6"},{"id":"0aaef93264c398697526783381b3a6cd","t":"fecd2752dbb50686f44e654bbcdb900a"},{"id":"3b6bdda81fc632f7f0907ad8fbe4f626","t":"9772373f0d47af949edbeb78b187819a"},{"id":"4866fb884111f42f9c29c7d861e7846a","t":"dcece3feff65d9f3cd8e6848f90fd07b"},{"id":"f56c2d4661faee4006a6db72feac4523","t":"896d72e0ebb58074ac53c572273da8f6"},{"id":"f93dc6342b482f538e815741ba7911a4","t":"6afa0d790aebcb2655f809a569b7a3af"},{"id":"d22748db71db97d556792074ff137671","t":"6ecd58f239ab9693bbc9ffdbf0c0f961"},{"id":"730b92ce46c4b7d13092009b5ff82cb2","t":"b30196e9608fbaba8caafefd9b73e574"},{"id":"d711773c8213b4c2767aaf21b037611b","t":"f9ac1761d4a41fc93bdc59c97e3e2136"},{"id":"5990f2741a6e65a27c4df7dac93fab32","t":"83d9038c8da61c8f8f4f8dc38f929dcd"},{"id":"3588814c7c28ea8f6bc8b3eb4ffbca93","t":"efee15a43e164671ddc9d78aa4550f2d"}],"added":7,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-gray","brand":"Kia","model":"Sorento","trim":"X-Line","year":2027,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"عسلي (بركاني )","interior":"بني (كاميل)","inspection":"","branch":"kr","status":"available","price":48905,"currency":"USD","note":"العربية في كوريا وجاهزة للشحن لمصر أو السعودية.\n\nSORENTO 2027 X LINE \n الكماليات: سقف بانوراما، فرش جلد بني، شاشتين منحنيتين، شاشة عرض على الزجاج (HUD)، صف تالت (7 ركاب).","photos":[{"id":"a86e667fb2fdc34e46c632fde44c3a81","t":"32fb87f4869fe47ef7ac3c6a41e3a381"},{"id":"9aca2f90ad04a27f35ca40a603ba41f0","t":"e2d2d86b78c4584f304621064a4209ef"},{"id":"91438884c2889c0ce544e17de9f73b71","t":"5e985dd15c53e464975ec27be749918a"},{"id":"c8161944109e314e990411181382bdf6","t":"bb17dce991a67a0b4e634c4499c20da4"},{"id":"4b48b09fa577697e55c0470f2b360742","t":"730b98d19733da38442a898c67ba6acd"},{"id":"3647b690c1456adef0c747eb6f541054","t":"34cc555d21750367375bf9186027fd7f"},{"id":"84c044e781dec12e19aad0eaaaede2e7","t":"199b28bb9a527ce0ec60aa67fae49236"},{"id":"e06482425afb95ff50fd22cbb69a7452","t":"ec5ffa36703f1c22763e95b4d703803b"},{"id":"394d9fcbea8f21b05cc1e2660db5a66a","t":"3f6c6b1c0e75e916f855031bd5e53bbf"},{"id":"63a2b91f5e5140f7e9eef13d9ced2759","t":"9b8326f2df48a5587655b11df7c17afb"}],"added":8,"sample":false,"addedAt":"2026-11-27","video":"https://youtu.be/E3MGYYoGwWs?si=Mim_baWidiahU3V1","report":[],"prices":{"eg":{"price":48905,"currency":"USD","note":""},"sa":{"price":220936,"currency":"SAR","note":"شامل التوصيل للرياض"}}}],"pricing":{},"reviews":[{"id":"rmwz70sgd","url":"https://youtu.be/ilre8GhLcEQ?si=8UzHtFGWj9sMQQli","name":"د. عمرو بن عدنان","city":"المدينة المنورة","car":"جينيسيس GV80 2024 فل أوبشن","quote":"الشركة الراقية المهنية المحترمة"},{"id":"rmwz7dsmu","url":"https://youtu.be/SRM9uvauUQI?si=zGuOfpX6dHTfXz8p","name":"م. محمد إمام","city":"الرياض","car":"كيا سورينتو 2024","quote":"بتحس إنهم بيتعاملوا معاك كأخ مش عميل"},{"id":"rmwz6ed1g","url":"https://youtu.be/4Cc39bdre0E?si=UElwtiJdG498LipH","name":"م. أحمد","city":"القاهرة","car":"كيا سورينتو 2024","quote":"أنا مرتاح ليكم من زمان"},{"id":"rmwz6umpz","url":"https://youtu.be/j9EghVLRr9s?si=qlkZfQfvcy2KmIZb","name":"م. وفيق","city":"التجمع الخامس","car":"كيا K5 2026","quote":"الموضوع باختصار منظومة عارفها إزاي بتقدّم الخدمة بأفضل الطرق"},{"id":"rmwz5pk8e","url":"https://youtube.com/shorts/BuVXWx4UbQc?si=QCVZeKMJOSJ7wv6G","name":"م. محمد","city":"كفر الشيخ","car":"كيا سبورتاج 2026","quote":"أنا وثقت في شركة أفندينا إنها تصمم لي السيارة من المصنع"}],"orders":[]}</script>
 <div id="app"></div>
 <script id="main">
 (function(){
@@ -1283,6 +1341,7 @@ function openCar(id,fromHash){
     h("div",null,
       h("div",{style:"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"},statusBadge(c),isNew(c)&&!sold&&h("span",{class:"badge nw"},"✦ وصل حديثاً"),c.sample&&h("span",{class:"badge ex"},"مثال")),
       h("div",{class:"big-price"},priceNode(c)),
+      saIncl(c),
       isDual(c)?h("div",{class:"d-mk"},marketSwitch(()=>{render();openCar(c.id,"pop")})):null,
       h("div",{class:"code"},"كود السيارة: "+c.id),
       h("div",{class:"d-tools"},favBtn(c,true),cmpBtn(c,true),shareBtn(c),video),
@@ -1354,9 +1413,56 @@ renderReviews();
   $("tnWa").append(svg(ICON.wa),h("span",null,"واتساب"));
   $("tnWa").addEventListener("click",e=>{e.stopPropagation();const fb=$("fabBtn");if(fb)fb.click();else location.hash="branches"});
   if("IntersectionObserver" in window){new IntersectionObserver(es=>{for(const en of es)nav.classList.toggle("show",!en.isIntersecting)},{rootMargin:"-60px 0px 0px 0px"}).observe(hero)}
-  const secs=["cars","reviews","request","branches"].map(id=>$(id)).filter(Boolean);
+  const secs=["cars","reviews","request","track","branches"].map(id=>$(id)).filter(Boolean);
   if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{for(const en of es)if(en.isIntersecting){nav.querySelectorAll(".tn-links a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+en.target.id))}},{rootMargin:"-45% 0px -50% 0px"});secs.forEach(s=>io.observe(s))}
 }
+
+/* ---------- Saudi price: what it includes ---------- */
+function saIncl(c){
+  const e=effPrice(c);
+  const isSa=e&&e.price!=null&&e.price!==""&&(e.currency==="SAR")&&(isDual(c)||modeOf(c)==="sa"||/الرياض/.test(e.note||c.priceNote||""));
+  if(!isSa)return null;
+  return h("div",{class:"incl"},h("b",null,"السعر يشمل:"),...["الشحن من كوريا","الجمارك","الضريبة","التخليص","التوصيل للرياض"].map(x=>h("span",null,"✓ "+x)));
+}
+
+/* ---------- order tracking ---------- */
+if(!Array.isArray(state.orders))state.orders=[];
+const STAGES={
+  eg:["تم الشراء في كوريا","تم الشحن من كوريا","وصلت ميناء مصر","في التخليص الجمركي","جاهزة للاستلام","تم التسليم"],
+  sa:["تم الشراء في كوريا","تم الشحن من كوريا","وصلت ميناء العقبة","في الطريق للسعودية","في التخليص","جاهزة للاستلام","تم التسليم"]};
+const normCode=s=>String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+const showCode=s=>{const n=normCode(s);return n.length>2?n.slice(0,2)+"-"+n.slice(2):n};
+async function sha256hex(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+async function findOrder(input){
+  const n=normCode(input);if(n.length<6)return null;
+  const plain=state.orders.find(o=>o.code&&normCode(o.code)===n);if(plain)return plain;
+  if(!state.orders.some(o=>o.h)||!(window.crypto&&crypto.subtle))return null;
+  const hx=await sha256hex(n);return state.orders.find(o=>o.h===hx)||null;
+}
+const fmtDate=d=>{try{return new Date(d+"T00:00:00").toLocaleDateString("ar-EG-u-nu-latn",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d}};
+function renderTrackResult(o,code){
+  const st=STAGES[o.country]||STAGES.eg,cur=Math.min(o.stage||0,st.length-1),dates=o.dates||{};
+  $("trOut").replaceChildren(h("div",{class:"tr-card"},
+    h("div",{class:"tr-head"},h("b",null,o.car||"عربيتك"),h("span",null,"كود الطلب: "+showCode(code)+" · الاستلام في "+(o.country==="sa"?"السعودية":"مصر"))),
+    h("ol",{class:"tr-steps"},st.map((s,i)=>h("li",{class:i<cur?"done":i===cur?(cur===st.length-1?"done":"now"):""},
+      h("span",{class:"tr-dot"},i<cur||(i===cur&&cur===st.length-1)?"✓":String(i+1)),
+      h("div",null,h("b",null,s),dates[i]?h("small",null,fmtDate(dates[i])):null)))),
+    o.eta&&cur<st.length-2?h("div",{class:"tr-eta"},"الوصول المتوقع: "+fmtDate(o.eta)):null,
+    o.note?h("div",{class:"tr-note"},o.note):null));
+}
+async function runTrack(code){
+  $("trMsg").textContent="";$("trOut").replaceChildren();
+  const n=normCode(code);
+  if(n.length<6){$("trMsg").textContent="اكتب كود الطلب كامل زي ما وصلك على واتساب.";return}
+  const o=await findOrder(n);
+  if(!o){$("trMsg").textContent="الكود ده مش موجود. اتأكد منه، أو كلّمنا على واتساب.";return}
+  renderTrackResult(o,n);
+}
+function renderTrackSection(){const on=state.orders.length>0;$("track").hidden=!on;$("heroTrack").hidden=!on;$("ftTrack").hidden=!on;const tn=$("tnTrack");if(tn)tn.hidden=!on}
+$("trForm").addEventListener("submit",e=>{e.preventDefault();runTrack($("trCode").value)});
+$("trCode").addEventListener("input",()=>{const n=normCode($("trCode").value);const v=showCode(n);if($("trCode").value!==v)$("trCode").value=v});
+renderTrackSection();
+{const m=location.hash.match(/^#track-([A-Za-z0-9]+)$/);if(m&&state.orders.length){$("trCode").value=showCode(m[1]);setTimeout(()=>{$("track").scrollIntoView();runTrack(m[1])},300)}}
 refreshBrandOptions();render();fromHash();setupReveal();
 
 /* ---------- admin ---------- */
@@ -1560,6 +1666,49 @@ function reviewsSettings(){
       h("label",{class:"wide"},"صورة غلاف (اختياري)",h("div",{style:"display:flex;gap:8px;align-items:center;flex-wrap:wrap"},file,covMsg))),
     h("div",{style:"display:flex;gap:10px;flex-wrap:wrap"},add,msg));
 }
+
+function newOrderCode(){const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";let s="";const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=A[x%A.length];return "AF"+s}
+function ordersSettings(){
+  const today=new Date().toISOString().slice(0,10);
+  const rows=state.orders.map((o,i)=>{
+    const st=STAGES[o.country]||STAGES.eg;
+    const sel=h("select",{"aria-label":"المرحلة"});st.forEach((s,k)=>sel.append(h("option",{value:k},(k+1)+". "+s)));sel.value=o.stage||0;
+    const eta=h("input",{type:"date",value:o.eta||"","aria-label":"الوصول المتوقع"});
+    const note=h("input",{value:o.note||"",placeholder:"ملحوظة للعميل (اسم الباخرة…)",style:"flex:1 1 180px"});
+    const sv=h("button",{class:"btn btn-accent btn-sm",type:"button"},"حفظ");
+    sv.addEventListener("click",async()=>{const before=JSON.stringify(state);const ns=Number(sel.value);
+      o.dates=o.dates||{};if(ns!==(o.stage||0)){for(let k=0;k<=ns;k++)if(!o.dates[k])o.dates[k]=today;for(const k in o.dates)if(Number(k)>ns)delete o.dates[k]}
+      o.stage=ns;o.eta=eta.value||"";o.note=note.value.trim();o.updated=today;sv.disabled=true;
+      if(!(await save()))state=JSON.parse(before);sv.disabled=false;openManager()});
+    const msg=()=>"أهلاً بيك من أفندينا موتورز 👋\nتقدر تتابع مرحلة عربيتك ("+(o.car||"")+") في أي وقت من هنا:\n"+SITE_URL+"#track-"+normCode(o.code)+"\nكود الطلب: "+showCode(o.code);
+    const cp=h("button",{class:"btn btn-line btn-sm",type:"button"},"نسخ رسالة للعميل");
+    cp.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(msg());toast("اتنسخت الرسالة — ابعتها للعميل على واتساب")}catch(e){toast(msg(),9000)}});
+    const del=h("button",{class:"btn btn-danger btn-sm",type:"button"},"حذف");let armed=false;
+    del.addEventListener("click",async()=>{if(!armed){armed=true;del.textContent="تأكيد الحذف";setTimeout(()=>{armed=false;del.textContent="حذف"},4000);return}
+      const before=JSON.stringify(state);state.orders.splice(i,1);if(!(await save()))state=JSON.parse(before);renderTrackSection();openManager()});
+    return h("div",{class:"or-row"},
+      h("div",{class:"or-top"},h("code",null,showCode(o.code)),h("b",null,o.car||""),h("span",{style:"color:var(--muted);font-size:.85rem"},o.country==="sa"?"🇸🇦 السعودية":"🇪🇬 مصر"),o.customer?h("span",{style:"color:var(--muted);font-size:.85rem"},"· "+o.customer):null),
+      h("div",{class:"or-ctl"},sel,h("label",{style:"display:flex;gap:6px;align-items:center;font-size:.85rem;color:var(--muted)"},"الوصول المتوقع",eta),note),
+      h("div",{class:"or-ctl"},sv,cp,del));
+  });
+  const f={car:h("input",{placeholder:"كيا سورينتو 2026 X-Line رمادي"}),customer:h("input",{placeholder:"للإدارة بس — مش بيظهر للعميل"}),country:h("select",null,h("option",{value:"eg"},"مصر"),h("option",{value:"sa"},"السعودية"))};
+  const amsg=h("span",{style:"font-size:.88rem;color:var(--accent);align-self:center"});
+  const add=h("button",{class:"btn btn-accent btn-sm",type:"button"},"إنشاء طلب جديد");
+  add.addEventListener("click",async()=>{
+    const car=f.car.value.trim();if(!car){amsg.textContent="اكتب العربية.";return}
+    let code;do{code=newOrderCode()}while(state.orders.some(o=>normCode(o.code)===code));
+    const o={code,car,customer:f.customer.value.trim(),country:f.country.value,stage:0,dates:{0:today},eta:"",note:"",created:today,updated:today};
+    const before=JSON.stringify(state);state.orders.unshift(o);add.disabled=true;
+    const ok=await save();add.disabled=false;if(!ok){state=JSON.parse(before);return}
+    renderTrackSection();openManager();toast("اتعمل الطلب بكود "+showCode(code)+" — دوس «نسخ رسالة للعميل» وابعتها له",5000);
+  });
+  return h("div",{class:"settings"},
+    h("h3",null,"تتبّع طلبات العملاء"),
+    h("p",null,"اعمل طلب لكل عميل، وابعتله الكود. لما العربية تتنقل لمرحلة جديدة، غيّر المرحلة واضغط حفظ، والعميل هيشوفها على الموقع. اسم العميل للإدارة بس ومش بيتنشر على الموقع، والكود نفسه بيتخزن على الموقع متشفّر."),
+    rows.length?h("div",null,rows):h("p",null,"لسه مفيش طلبات. قسم «تتبّع طلبك» مش هيظهر على الموقع غير لما تعمل أول طلب."),
+    h("div",{class:"form"},h("label",{class:"wide"},"العربية",f.car),h("label",null,"اسم العميل (اختياري)",f.customer),h("label",null,"الاستلام في",f.country)),
+    h("div",{style:"display:flex;gap:10px;flex-wrap:wrap"},add,amsg));
+}
 function openManager(){
   const body=$("mBody");
   const rows=[...state.cars].sort((a,b)=>(b.added||0)-(a.added||0)).map(c=>{
@@ -1632,7 +1781,7 @@ function openManager(){
     h("p",null,"السعر = العربية (بسعر الوون اللي فوق) + الشحن + التخليص + عمولة الشركة. بيتطبق على "+egCount+" عربية."),
     h("div",{class:"form"},einputs),
     h("div",{style:"display:flex;gap:10px;flex-wrap:wrap"},esave,emsg));
-  body.replaceChildren(reviewsSettings(),settings,egSettings,clear||"",rows.length?h("div",null,rows):h("p",null,"لا توجد سيارات بعد."));
+  body.replaceChildren(ordersSettings(),reviewsSettings(),settings,egSettings,clear||"",rows.length?h("div",null,rows):h("p",null,"لا توجد سيارات بعد."));
   if(!$("manager").open)$("manager").showModal();
 }
 $("addCar").addEventListener("click",()=>openEditor(null));
@@ -1650,5 +1799,10 @@ $("manage").addEventListener("click",openManager);
   }catch(e){}
 })();
 })();
-</script>
-</body></html>
+</script><script>
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest('a[href^="https://wa.me/"]');if(!a)return;
+try{var href=decodeURIComponent(a.getAttribute("href")),m=href.match(/\u0643\u0648\u062f: ([A-Za-z0-9-]+)/),cc=/wa\.me\/966/.test(href)?"sa":"eg";
+var back=location.pathname+location.search+location.hash,st=history.state;
+history.pushState(st,"","/go/wa/"+(m?m[1]:"general")+"/"+cc+"/");
+setTimeout(function(){if(location.pathname.indexOf("/go/wa/")===0)history.replaceState(st,"",back)},1500)}catch(_){}},true);
+</script></body></html>
