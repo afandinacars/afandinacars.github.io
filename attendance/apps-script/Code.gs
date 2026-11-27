@@ -6,6 +6,8 @@
 const CLIENT_ID = 'PUT_YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com';
 
 const TZ = 'Africa/Cairo';
+const APP_URL = 'https://afandinacars.github.io/attendance/';
+const REMIND_HOUR = 9; // ساعة إيميل التذكير (بتوقيت القاهرة)
 const SHEETS = {
   Settings:   ['key', 'value'],
   Branches:   ['id', 'name', 'start', 'end', 'grace', 'off', 'lat', 'lng', 'radius'],
@@ -37,9 +39,49 @@ function setup() {
     br.appendRow(['b10ram', 'العاشر من رمضان', '09:00', '17:00', '15', '5', '', '', '150']);
     br.appendRow(['bnasr', 'مدينة نصر', '09:00', '17:00', '15', '5', '', '', '150']);
   }
+  installReminder();
   const def = ss.getSheetByName('Sheet1') || ss.getSheetByName('ورقة1');
   if (def && def.getLastRow() === 0 && ss.getSheets().length > 1) ss.deleteSheet(def);
 }
+
+/* ---------- تذكير الحضور بالإيميل ---------- */
+function installReminder() {
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'remind') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('remind').timeBased().atHour(REMIND_HOUR).nearMinute(0).everyDays(1).inTimezone(TZ).create();
+}
+
+function remind() {
+  const t = now();
+  const wd = new Date(t.date + 'T12:00:00Z').getUTCDay();
+  const brs = branches();
+  const done = rows('Attendance').filter(function (a) { return a.date === t.date; }).map(function (a) { return a.email; });
+  const onLeave = rows('Leaves').filter(function (l) {
+    return l.status === 'approved' && l.type !== 'permission' && l.from <= t.date && l.to >= t.date;
+  }).map(function (l) { return l.email; });
+  rows('Employees').forEach(function (e) {
+    if (e.status !== 'active' || done.indexOf(e.email) >= 0 || onLeave.indexOf(e.email) >= 0) return;
+    const br = brs.filter(function (b) { return b.id === e.branchId; })[0];
+    if (br && br.off.indexOf(wd) >= 0) return;
+    const start = br ? br.start : '09:00';
+    try {
+      MailApp.sendEmail({
+        to: e.email,
+        name: 'حضور أفندينا موتورز',
+        subject: '⚠️ ' + e.name.split(' ')[0] + '، سجّل حضورك دلوقتي',
+        body: 'صباح الخير يا ' + e.name + '\nالدوام بيبدأ الساعة ' + start + '. لو وصلت، سجّل حضورك من هنا:\n' + APP_URL +
+              '\n\nالتأخير أكتر من ربع ساعة عليه خصم.',
+        htmlBody: '<div dir="rtl" style="font-family:Tahoma,Arial,sans-serif;font-size:15px;line-height:1.7">' +
+          '<p>صباح الخير يا <b>' + esc(e.name) + '</b></p>' +
+          '<p>الدوام بيبدأ الساعة <b>' + esc(start) + '</b>. لو وصلت، سجّل حضورك دلوقتي:</p>' +
+          '<p><a href="' + APP_URL + '" style="background:#C9781A;color:#fff;padding:12px 22px;border-radius:10px;text-decoration:none;font-weight:bold;display:inline-block">تسجيل حضور</a></p>' +
+          '<p style="color:#5B6976;font-size:13px">التأخير أكتر من ربع ساعة عليه خصم: ربع يوم لحد 30 دقيقة، نص يوم لحد ساعة، ويوم كامل بعد كده.</p></div>'
+      });
+    } catch (x) { console.error('remind ' + e.email + ': ' + x); }
+  });
+}
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
 
 /* ---------- HTTP ---------- */
 function doGet() { return json({ ok: true, service: 'afandina-attendance' }); }

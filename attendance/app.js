@@ -34,6 +34,8 @@ function monthEnd(ym) { const [y, m] = ym.split("-").map(Number); return new Dat
 function hm(s) { if (!s) return 0; const [a, b] = String(s).split(":").map(Number); return (a || 0) * 60 + (b || 0); }
 function fmtT(min) { if (min == null) return "—"; const H = Math.floor(min / 60), M = min % 60, h12 = ((H + 11) % 12) + 1; return `${h12}:${String(M).padStart(2, "0")} ${H < 12 ? "ص" : "م"}`; }
 function fmtDur(m) { m = Math.round(m || 0); if (!m) return "0"; const H = Math.floor(m / 60), M = m % 60; return H ? (M ? `${H}س ${M}د` : `${H}س`) : `${M}د`; }
+function dedFor(m){return m>60?1:m>30?0.5:m>15?0.25:0;}
+function fmtDed(d){d=Math.round((d||0)*100)/100;if(!d)return"0";if(d===0.25)return"ربع يوم";if(d===0.5)return"نص يوم";if(d===1)return"يوم";return d+" يوم";}
 function fmtDate(date, opt) { return new Intl.DateTimeFormat("ar-EG-u-nu-latn", Object.assign({timeZone:"UTC", weekday:"long", day:"numeric", month:"long"}, opt || {})).format(new Date(date + "T12:00:00Z")); }
 function chip(st, extra) { return h("span", {class:"chip c-" + st}, extra || STATUS[st] || st); }
 function branchOf(list, id) { return (list || []).find(b => b.id === id) || null; }
@@ -42,11 +44,12 @@ function setMsg(el, text, good) { el.className = "msg " + (good ? "good" : "err"
 
 function evalDay(date, day, branch, leaveSet, now) {
   const off = !!(branch && Array.isArray(branch.off) && branch.off.includes(wday(date)));
-  const r = {date, status:"future", late:0, early:0, ot:0, worked:0, off, inMin:null, outMin:null, workday:!off};
+  const r = {date, status:"future", late:0, ded:0, early:0, ot:0, worked:0, off, inMin:null, outMin:null, workday:!off};
   const st = branch ? hm(branch.start) : hm("09:00"), en = branch ? hm(branch.end) : hm("17:00"), g = branch ? (+branch.grace || 0) : 0;
   if (day && day.inMin != null) {
     r.inMin = day.inMin; r.outMin = day.outMin ?? null;
     if (!off && day.inMin > st + g) r.late = day.inMin - st;
+    if (!off) r.ded = dedFor(day.inMin - st);
     if (day.outMin != null) {
       r.worked = Math.max(0, day.outMin - day.inMin);
       if (off) r.ot = r.worked; else { r.ot = Math.max(0, day.outMin - en); r.early = Math.max(0, en - day.outMin); }
@@ -61,14 +64,14 @@ function evalDay(date, day, branch, leaveSet, now) {
 }
 function leaveSet(leaves) { const s = new Set(); for (const l of leaves) if (l.status === "approved" && l.type !== "permission") datesBetween(l.from, l.to).forEach(d => s.add(d)); return s; }
 function summarize(rows, now) {
-  const t = {workdays:0, present:0, abs:0, leave:0, lateN:0, lateMin:0, early:0, ot:0, worked:0, noout:0};
+  const t = {ded:0, workdays:0, present:0, abs:0, leave:0, lateN:0, lateMin:0, early:0, ot:0, worked:0, noout:0};
   for (const r of rows) {
     if (r.date > now.date) continue;
     if (r.workday) t.workdays++;
     if (r.inMin != null) t.present++;
     if (r.status === "abs" && r.date < now.date) t.abs++;
     if (r.status === "leave" && r.workday) t.leave++;
-    if (r.late) { t.lateN++; t.lateMin += r.late; }
+    if (r.late) { t.lateN++; t.lateMin += r.late; } t.ded += r.ded || 0;
     t.early += r.early; t.ot += r.ot; t.worked += r.worked; if (r.noOut) t.noout++;
   }
   return t;
@@ -195,12 +198,12 @@ function fillPunch() {
         catch (e) { setMsg(msg, e.message); b.disabled = false; b.textContent = isOut ? "تسجيل انصراف" : "تسجيل حضور"; }
       };
       body.append(b);
-      if (isOut && ev.late) body.append(h("div", {class:"row"}, chip("late", `متأخر ${fmtDur(ev.late)}`)));
+      if (isOut && ev.late) body.append(h("div", {class:"row"}, chip("late", `متأخر ${fmtDur(ev.late)}`), ev.ded?chip("abs",`خصم ${fmtDed(ev.ded)}`):null));
       if (!isOut && ev.off) body.append(h("div", {class:"note", text:"النهارده إجازة الفرع الأسبوعية. لو سجّلت، الوقت كله هيتحسب إضافي."}));
       if (br && br.lat != null) body.append(h("div", {class:"dist", text:`التسجيل مسموح من جوه الفرع بس (في حدود ${br.radius} متر).`}));
     } else {
       body.append(h("div", {class:"row"}, chip(ev.status), h("span", {class:"small muted", text:`اشتغلت ${fmtDur(ev.worked)}`}),
-        ev.ot ? chip("ok", `إضافي ${fmtDur(ev.ot)}`) : null, ev.early ? chip("late", `انصراف بدري ${fmtDur(ev.early)}`) : null));
+        ev.ot ? chip("ok", `إضافي ${fmtDur(ev.ot)}`) : null, ev.early ? chip("late", `انصراف بدري ${fmtDur(ev.early)}`) : null, ev.ded?chip("abs",`خصم ${fmtDed(ev.ded)}`):null));
     }
   }
   body.append(msg);
@@ -220,11 +223,11 @@ function fillMonth() {
   const rows = datesBetween(ym + "-01", now.date).map(d => evalDay(d, byDate[d], br, ls, now));
   const t = summarize(rows, now);
   $("monthName").textContent = fmtDate(ym + "-01", {weekday:undefined, day:undefined, month:"long", year:"numeric"});
-  $("myStats").replaceChildren(...[["أيام حضور", t.present], ["غياب", t.abs], ["مرات تأخير", t.lateN], ["إجمالي التأخير", fmtDur(t.lateMin)], ["إضافي", fmtDur(t.ot)], ["إجازات", t.leave]]
+  $("myStats").replaceChildren(...[["أيام حضور", t.present], ["غياب", t.abs], ["مرات تأخير", t.lateN], ["إجمالي التأخير", fmtDur(t.lateMin)], ["إضافي", fmtDur(t.ot)], ["إجازات", t.leave], ["خصم التأخير", fmtDed(t.ded)]]
     .map(([a, b]) => h("div", {class:"stat"}, h("b", {text:String(b)}), h("span", {text:a}))));
   const list = rows.slice().reverse().slice(0, 14);
   $("myDays").replaceChildren(...(list.length ? list.map(r => h("div", {class:"item"},
-    h("div", {class:"main"}, h("span", {text:fmtDate(r.date)}), h("span", {class:"small muted num", text:r.inMin != null ? `${fmtT(r.inMin)} ← ${fmtT(r.outMin)}` : " "})), chip(r.status)))
+    h("div", {class:"main"}, h("span", {text:fmtDate(r.date)}), h("span", {class:"small muted num", text:r.inMin != null ? `${fmtT(r.inMin)} ← ${fmtT(r.outMin)}` : " "})), h("div", {class:"row"}, r.ded?chip("abs",`خصم ${fmtDed(r.ded)}`):null, chip(r.status))))
     : [h("div", {class:"empty-state", text:"أيامك هتظهر هنا أول ما تسجّل."})]));
   const lv = S.my.leaves.slice().sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
   $("myLeaves").replaceChildren(...(lv.length ? lv.map(l => h("div", {class:"item"},
@@ -311,7 +314,7 @@ function tabToday() {
         h("td", {class:"name", text:r.e.name}), h("td", {text:r.br ? r.br.name : "—"}),
         h("td", {class:"mono", text:fmtT(r.ev.inMin)}), h("td", {class:"mono", text:fmtT(r.ev.outMin)}),
         h("td", {class:"mono", text:r.day && r.day.inDist != null ? `${r.day.inDist} م` : "—"}),
-        h("td", null, chip(r.ev.status, r.ev.status === "late" ? `متأخر ${fmtDur(r.ev.late)}` : null)))))))
+        h("td", null, h("div", {class:"row"}, chip(r.ev.status, r.ev.status === "late" ? `متأخر ${fmtDur(r.ev.late)}` : null), r.ev.ded?chip("abs",`خصم ${fmtDed(r.ev.ded)}`):null)))))))
     : h("div", {class:"empty-state", text:"لسه مفيش موظفين متفعّلين. ابعت لينك الصفحة للموظفين، وكل واحد يدخل بجيميله ويسجّل بياناته، وبعدها وافق عليهم من تبويب الموظفين."}));
 }
 async function setEmp(email, patch, btn) {
@@ -382,18 +385,18 @@ function buildReport(d, ym, bf, out) {
   }).sort((a, b) => a.name.localeCompare(b.name, "ar"));
   S.lastReport = {ym, rows};
   if (!rows.length) return out.replaceChildren(h("div", {class:"empty-state", text:"مفيش موظفين في الفرع ده."}));
-  const cols = [["الموظف", r => r.name, "name"], ["الفرع", r => r.branch], ["أيام العمل", r => r.t.workdays], ["حضور", r => r.t.present], ["غياب", r => r.t.abs], ["إجازات", r => r.t.leave], ["مرات التأخير", r => r.t.lateN], ["التأخير", r => fmtDur(r.t.lateMin)], ["انصراف بدري", r => fmtDur(r.t.early)], ["إضافي", r => fmtDur(r.t.ot)], ["ساعات العمل", r => fmtDur(r.t.worked)], ["بدون انصراف", r => r.t.noout]];
+  const cols = [["الموظف", r => r.name, "name"], ["الفرع", r => r.branch], ["أيام العمل", r => r.t.workdays], ["حضور", r => r.t.present], ["غياب", r => r.t.abs], ["إجازات", r => r.t.leave], ["مرات التأخير", r => r.t.lateN], ["التأخير", r => fmtDur(r.t.lateMin)], ["خصم (يوم)", r => r.t.ded], ["انصراف بدري", r => fmtDur(r.t.early)], ["إضافي", r => fmtDur(r.t.ot)], ["ساعات العمل", r => fmtDur(r.t.worked)], ["بدون انصراف", r => r.t.noout]];
   out.replaceChildren(h("div", {class:"wrap", style:"gap:10px"},
     h("div", {class:"spread"}, h("span", {class:"small muted", text:`من ${fmtDate(start, {weekday:undefined})} لحد ${fmtDate(last, {weekday:undefined})}`}), h("button", {class:"btn sm", text:"تنزيل Excel (CSV)", onclick:exportCsv})),
     h("div", {class:"tablewrap"}, h("table", null, h("thead", null, h("tr", null, cols.map(c => h("th", {text:c[0]})))),
       h("tbody", null, rows.map(r => h("tr", null, cols.map(c => h("td", {class:c[2] || "", text:String(c[1](r))}))))))),
-    h("p", {class:"small muted", text:"التأخير بيتحسب من ميعاد بداية الدوام لو الموظف جه بعد فترة السماح. أي شغل في يوم الإجازة الأسبوعية بيتحسب إضافي. البيانات الخام كلها موجودة في الشيت."})));
+    h("p", {class:"small muted", text:"التأخير بيتحسب من ميعاد بداية الدوام لو الموظف جه بعد فترة السماح. أي شغل في يوم الإجازة الأسبوعية بيتحسب إضافي. الخصم: من 16 لـ 30 دقيقة تأخير ربع يوم، من 31 لـ 60 نص يوم، وأكتر من ساعة يوم كامل. البيانات الخام كلها موجودة في الشيت."})));
 }
 function exportCsv() {
   const r = S.lastReport; if (!r) return;
-  const head = ["الموظف", "الفرع", "أيام العمل", "حضور", "غياب", "إجازات", "مرات التأخير", "دقائق التأخير", "دقائق الانصراف البدري", "دقائق الإضافي", "ساعات العمل", "أيام بدون انصراف"];
+  const head = ["الموظف", "الفرع", "أيام العمل", "حضور", "غياب", "إجازات", "مرات التأخير", "دقائق التأخير", "خصم التأخير (يوم)", "دقائق الانصراف البدري", "دقائق الإضافي", "ساعات العمل", "أيام بدون انصراف"];
   const esc = v => { const s = String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
-  const lines = [head].concat(r.rows.map(x => [x.name, x.branch, x.t.workdays, x.t.present, x.t.abs, x.t.leave, x.t.lateN, x.t.lateMin, x.t.early, x.t.ot, (x.t.worked / 60).toFixed(2), x.t.noout]));
+  const lines = [head].concat(r.rows.map(x => [x.name, x.branch, x.t.workdays, x.t.present, x.t.abs, x.t.leave, x.t.lateN, x.t.lateMin, x.t.ded, x.t.early, x.t.ot, (x.t.worked / 60).toFixed(2), x.t.noout]));
   const blob = new Blob(["﻿" + lines.map(l => l.map(esc).join(",")).join("\r\n")], {type:"text/csv;charset=utf-8"});
   const a = h("a", {href:URL.createObjectURL(blob), download:`attendance-${r.ym}.csv`}); document.body.append(a); a.click(); a.remove();
 }
