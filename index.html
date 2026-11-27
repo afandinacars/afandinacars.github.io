@@ -443,7 +443,8 @@ dl.spec dd{font-weight:500}
 /* customer video reviews */
 .reviews{background:var(--surface);border-top:1px solid var(--line);padding-block:3rem 3.25rem;scroll-margin-top:12px}
 .reviews h2{font-size:clamp(2.1rem,5vw,3.2rem);font-weight:800;margin-top:.6rem}
-.reviews .eyebrow{font-size:.95rem}
+.reviews .eyebrow{font-size:1.3rem;letter-spacing:.16em}
+.reviews .eyebrow::after{width:64px}
 .reviews .lead{color:var(--muted);font-size:1.08rem;margin:.8rem 0 0;max-width:56ch}
 .rv-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,260px);gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:1.5rem 2px 8px}
 .rv-card{scroll-snap-align:start;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}
@@ -472,7 +473,7 @@ dl.spec dd{font-weight:500}
 .rv-admin .list-row img{width:44px;height:58px;object-fit:cover;border-radius:6px;background:var(--chip)}
 </style>
 <template id="shell">
-  <div class="admin-bar" id="adminBar" hidden>
+  <div class="admin-bar" id="adminBar" hidden="">
     <div class="wrap">
       <span>أنت تشاهد المعرض كمدير — التعديلات تظهر للعملاء بعد الحفظ.</span>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -494,8 +495,8 @@ dl.spec dd{font-weight:500}
       <div class="topbar">
         <div class="brand"><img src="assets/logo-t.webp" alt="أفندينا موتورز — AFANDINA" width="420" height="446"></div>
         <nav class="top-links" aria-label="روابط سريعة">
-          <a class="btn btn-ghost btn-sm" href="#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.25" fill="currentColor"/></svg>من نحن</a>
-          <a class="btn btn-ghost btn-sm" href="#branches"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>الفروع والتواصل</a>
+          <a class="btn btn-ghost btn-sm" href="#about"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path><circle cx="12" cy="7.6" r="1.25" fill="currentColor"></circle></svg>من نحن</a>
+          <a class="btn btn-ghost btn-sm" href="#branches"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"></path></svg>الفروع والتواصل</a>
         </nav>
       </div>
       <div class="hero-grid">
@@ -516,9 +517,9 @@ dl.spec dd{font-weight:500}
   <main class="wrap" id="cars">
     <div class="finder" role="search">
       <div class="search-row">
-        <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"></circle><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
           <input id="q" type="search" placeholder="ابحث بالاسم: سورينتو، كيا 2026، هايبرد…" aria-label="بحث" autocomplete="off"></label>
-        <button class="btn btn-line filter-toggle" id="fToggle" type="button" aria-expanded="false" aria-controls="fPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>فلترة<span class="f-count" id="fCount" hidden></span></button>
+        <button class="btn btn-line filter-toggle" id="fToggle" type="button" aria-expanded="false" aria-controls="fPanel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>فلترة<span class="f-count" id="fCount" hidden=""></span></button>
       </div>
       <div class="f-panel" id="fPanel">
         <label class="f-field">الماركة<select id="fBrand"><option value="">كل الماركات</option></select></label>
@@ -537,10 +538,10 @@ dl.spec dd{font-weight:500}
       </div>
       <div class="quick" id="quick" role="group" aria-label="فلاتر سريعة"></div>
     </div>
-    <section class="recent" id="recent" hidden aria-labelledby="recentTitle"><h2 id="recentTitle">شُفتها مؤخراً<button type="button" id="recentClear">مسح</button></h2><div class="recent-row" id="recentRow"></div></section>
+    <section class="recent" id="recent" hidden="" aria-labelledby="recentTitle"><h2 id="recentTitle">شُفتها مؤخراً<button type="button" id="recentClear">مسح</button></h2><div class="recent-row" id="recentRow"></div></section>
     <div class="result-line"><span id="count"></span><div class="chips" id="chips"></div></div>
     <section class="grid" id="grid" aria-live="polite"></section>
-    <div class="more-wrap" id="moreWrap" hidden><button class="btn btn-line more-btn" id="moreBtn" type="button">عرض المزيد</button></div>
+    <div class="more-wrap" id="moreWrap" hidden=""><button class="btn btn-line more-btn" id="moreBtn" type="button">عرض المزيد</button></div>
   </main>
   <section class="req" id="request" aria-labelledby="reqTitle">
     <div class="wrap req-grid">
@@ -549,14 +550,14 @@ dl.spec dd{font-weight:500}
         <h2 id="reqTitle">العربية اللي في دماغك مش معروضة؟</h2>
         <p>قولنا عايز إيه، ونجيبهالك من كوريا بتقرير الفحص والسعر النهائي لحد ما توصلك. الطلب بيتبعت لفريق المبيعات على واتساب على طول.</p>
       </div>
-      <form class="req-form" id="reqForm" novalidate>
-        <label>الماركة<select id="r-brand" required></select></label>
-        <label>الموديل<input id="r-model" placeholder="مثلاً: Sorento" required></label>
+      <form class="req-form" id="reqForm" novalidate="">
+        <label>الماركة<select id="r-brand" required=""></select></label>
+        <label>الموديل<input id="r-model" placeholder="مثلاً: Sorento" required=""></label>
         <label>السنة من<select id="r-year"></select></label>
         <label>اللون المفضل<input id="r-color" placeholder="أبيض، أسود…"></label>
         <label>الميزانية تقريباً<input id="r-budget" placeholder="مثلاً: 2 مليون جنيه"></label>
         <fieldset class="r-country"><legend>هتستلمها فين؟</legend>
-          <label><input type="radio" name="r-country" value="eg" checked> مصر</label>
+          <label><input type="radio" name="r-country" value="eg" checked=""> مصر</label>
           <label><input type="radio" name="r-country" value="sa"> السعودية</label>
         </fieldset>
         <label class="wide">تفاصيل تانية<textarea id="r-notes" rows="2" placeholder="الفئة، الفرش، الممشى، أي طلب خاص…"></textarea></label>
@@ -573,10 +574,10 @@ dl.spec dd{font-weight:500}
         <p class="lead">لو العربية اللي في دماغك مش معروضة، ابعتلنا الموديل والفئة واللون، وإحنا ندوّر عليها في كوريا ونحسبلك تكلفتها كاملة لحد ما توصلك.</p>
       </div>
       <ul class="pillars">
-        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><h3>بنجيبها على طلبك</h3><p>بندوّر في السوق الكوري على العربية بالموديل والفئة واللون اللي إنت عايزهم.</p></li>
-        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12.2l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>فحص قبل الشراء</h3><p>بنراجع تقرير الفحص والممشى وتاريخ العربية قبل ما نشتريها.</p></li>
-        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5h18l-2.2 4H5.2L3 15.5z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M6 15.5V11h12v4.5M9 11V7.5h6V11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span><h3>شحن ومتابعة</h3><p>بنتابع الشحن والتخليص خطوة بخطوة لحد ما العربية توصل.</p></li>
-        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg></span><h3>سعر واضح</h3><p>بنحسبلك تكلفة العربية بالتفصيل قبل ما تقرر، من سعرها في كوريا لحد وصولها.</p></li>
+        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.9"></circle><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></span><h3>بنجيبها على طلبك</h3><p>بندوّر في السوق الكوري على العربية بالموديل والفئة واللون اللي إنت عايزهم.</p></li>
+        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"></path><path d="M8.8 12.2l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><h3>فحص قبل الشراء</h3><p>بنراجع تقرير الفحص والممشى وتاريخ العربية قبل ما نشتريها.</p></li>
+        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5h18l-2.2 4H5.2L3 15.5z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"></path><path d="M6 15.5V11h12v4.5M9 11V7.5h6V11" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"></path></svg></span><h3>شحن ومتابعة</h3><p>بنتابع الشحن والتخليص خطوة بخطوة لحد ما العربية توصل.</p></li>
+        <li class="pillar"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"></rect><path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"></path></svg></span><h3>سعر واضح</h3><p>بنحسبلك تكلفة العربية بالتفصيل قبل ما تقرر، من سعرها في كوريا لحد وصولها.</p></li>
       </ul>
     </div>
   </section>
@@ -585,14 +586,14 @@ dl.spec dd{font-weight:500}
       <span class="eyebrow">HOW IT WORKS · إزاي بنشتغل</span>
       <h2 id="howTitle">من كوريا لحد ما تستلم، في 4 خطوات</h2>
       <ol class="step-list">
-        <li class="step rv"><span class="step-n">1</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5l1.6-4.6A2 2 0 0 1 8.5 9.5h7a2 2 0 0 1 1.9 1.4l1.6 4.6M4 15.5h16v3a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1v-1h-9v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="15.5" r=".6" fill="currentColor"/></svg></span><h3>تختار عربيتك</h3><p>من المعروض هنا، أو ابعتلنا الموديل والفئة واللون ونجيبهالك من كوريا.</p></li>
-        <li class="step rv"><span class="step-n">2</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.8 12.2l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>نفحصها في كوريا</h3><p>بنراجع تقرير الفحص والممشى الحقيقي، ونحسبلك التكلفة كاملة قبل ما تقرر.</p></li>
-        <li class="step rv"><span class="step-n">3</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5h18l-2.2 4H5.2L3 15.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6 15.5V11h12v4.5M9 11V7.5h6V11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><h3>نشحنها ونخلّصها</h3><p>بنتابع الشحن والتخليص خطوة بخطوة، وإنت عارف عربيتك فين.</p></li>
-        <li class="step rv"><span class="step-n">4</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M11 12.5L19 4.5M16 7.5l2 2M14 9.5l1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><h3>تستلمها</h3><p>من أقرب فرع ليك في مصر أو الرياض.</p></li>
+        <li class="step rv"><span class="step-n">1</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15.5l1.6-4.6A2 2 0 0 1 8.5 9.5h7a2 2 0 0 1 1.9 1.4l1.6 4.6M4 15.5h16v3a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1v-1h-9v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><circle cx="7.5" cy="15.5" r=".6" fill="currentColor"></circle></svg></span><h3>تختار عربيتك</h3><p>من المعروض هنا، أو ابعتلنا الموديل والفئة واللون ونجيبهالك من كوريا.</p></li>
+        <li class="step rv"><span class="step-n">2</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><path d="M8.8 12.2l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span><h3>نفحصها في كوريا</h3><p>بنراجع تقرير الفحص والممشى الحقيقي، ونحسبلك التكلفة كاملة قبل ما تقرر.</p></li>
+        <li class="step rv"><span class="step-n">3</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5h18l-2.2 4H5.2L3 15.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><path d="M6 15.5V11h12v4.5M9 11V7.5h6V11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path></svg></span><h3>نشحنها ونخلّصها</h3><p>بنتابع الشحن والتخليص خطوة بخطوة، وإنت عارف عربيتك فين.</p></li>
+        <li class="step rv"><span class="step-n">4</span><span class="step-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M11 12.5L19 4.5M16 7.5l2 2M14 9.5l1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><h3>تستلمها</h3><p>من أقرب فرع ليك في مصر أو الرياض.</p></li>
       </ol>
     </div>
   </section>
-  <section class="reviews" id="reviews" hidden aria-labelledby="rvTitle">
+  <section class="reviews" id="reviews" hidden="" aria-labelledby="rvTitle">
     <div class="wrap">
       <span class="eyebrow">REVIEWS · آراء العملاء</span>
       <h2 id="rvTitle">عملاء أفندينا بيحكوا</h2>
@@ -610,14 +611,14 @@ dl.spec dd{font-weight:500}
       </div>
       <div class="route-map" aria-label="خط سير السيارات من كوريا إلى مصر والسعودية">
         <svg viewBox="0 0 640 170" role="img" aria-hidden="true">
-          <path class="path p-eg" d="M580 70 C 460 -10, 210 -5, 70 72"/>
-          <path class="path p-sa" d="M580 70 C 480 150, 330 150, 250 112"/>
-          <path class="path p-sa" d="M250 112 C 290 128, 330 132, 370 128"/>
-          <circle class="node" cx="580" cy="70" r="9" stroke="var(--hero-ink)"/>
-          <circle cx="580" cy="70" r="3.5" fill="var(--hero-ink)"/>
-          <circle class="node" cx="70" cy="72" r="8" stroke="#7FB8E8"/>
-          <circle class="node" cx="250" cy="112" r="6" stroke="var(--hero-gold)"/>
-          <circle class="node" cx="370" cy="128" r="8" stroke="var(--hero-gold)"/>
+          <path class="path p-eg" d="M580 70 C 460 -10, 210 -5, 70 72"></path>
+          <path class="path p-sa" d="M580 70 C 480 150, 330 150, 250 112"></path>
+          <path class="path p-sa" d="M250 112 C 290 128, 330 132, 370 128"></path>
+          <circle class="node" cx="580" cy="70" r="9" stroke="var(--hero-ink)"></circle>
+          <circle cx="580" cy="70" r="3.5" fill="var(--hero-ink)"></circle>
+          <circle class="node" cx="70" cy="72" r="8" stroke="#7FB8E8"></circle>
+          <circle class="node" cx="250" cy="112" r="6" stroke="var(--hero-gold)"></circle>
+          <circle class="node" cx="370" cy="128" r="8" stroke="var(--hero-gold)"></circle>
           <text class="lbl" x="580" y="104" text-anchor="middle">كوريا</text>
           <text class="sub" x="580" y="121" text-anchor="middle">نقطة الانطلاق</text>
           <text class="lbl" x="70" y="104" text-anchor="middle">مصر</text>
@@ -627,7 +628,7 @@ dl.spec dd{font-weight:500}
         </svg>
       </div>
       <div class="b-grid" id="branchList"></div>
-      <div class="social" id="social" hidden>
+      <div class="social" id="social" hidden="">
         <h3>تابع أفندينا<small>عربيات جديدة، فيديوهات، وعروض الشحنات أول بأول</small></h3>
         <ul class="soc-list" id="socList"></ul>
       </div>
@@ -646,7 +647,7 @@ dl.spec dd{font-weight:500}
         <a href="#cars">السيارات المتاحة</a>
         <a href="#about">من نحن</a>
         <a href="#how">إزاي بنشتغل</a>
-        <a href="#reviews" id="ftReviews" hidden>آراء العملاء</a>
+        <a href="#reviews" id="ftReviews" hidden="">آراء العملاء</a>
         <a href="#request">اطلب عربية</a>
         <a href="#branches">الفروع والتواصل</a>
       </nav>
@@ -655,7 +656,7 @@ dl.spec dd{font-weight:500}
   </footer>
 
   <div class="fab" id="fab">
-    <div class="fab-menu" id="fabMenu" hidden>
+    <div class="fab-menu" id="fabMenu" hidden="">
       <span class="fab-title">كلّمنا على واتساب</span>
       <a id="fabEg" target="_blank" rel="noopener"><b>مصر</b><span class="num">0111 329 8457</span></a>
       <a id="fabSa" target="_blank" rel="noopener"><b>السعودية</b><span class="num">+966 56 963 4665</span></a>
@@ -663,37 +664,37 @@ dl.spec dd{font-weight:500}
     <button class="fab-btn" id="fabBtn" type="button" aria-expanded="false" aria-controls="fabMenu" aria-label="تواصل على واتساب"></button>
   </div>
 
-  <div class="cmp-bar" id="cmpBar" hidden>
+  <div class="cmp-bar" id="cmpBar" hidden="">
     <div class="cmp-inner">
       <span id="cmpText"></span>
       <div class="cmp-actions"><button class="btn btn-accent btn-sm" id="cmpOpen" type="button">قارن الآن</button><button class="btn btn-ghost btn-sm" id="cmpClear" type="button">إلغاء</button></div>
     </div>
   </div>
   <dialog id="compare" aria-labelledby="cTitle">
-    <div class="dlg-head"><h2 id="cTitle">مقارنة السيارات</h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-head"><h2 id="cTitle">مقارنة السيارات</h2><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
     <div class="dlg-body"><div class="cmp-table-wrap" id="cmpBody"></div></div>
   </dialog>
 
   <dialog id="detail" aria-labelledby="dTitle">
-    <div class="dlg-head"><h2 id="dTitle"></h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-head"><h2 id="dTitle"></h2><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
     <div class="dlg-body" id="dBody"></div>
     <div class="d-bar" id="dBar"></div>
   </dialog>
   <dialog id="player" aria-labelledby="plTitle">
-    <div class="dlg-head"><h2 id="plTitle">فيديو</h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-head"><h2 id="plTitle">فيديو</h2><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
     <div id="plBody"></div>
   </dialog>
   <dialog id="viewer" aria-label="عرض الصور">
-    <div class="v-top"><span class="v-count" id="vCount"></span><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="v-top"><span class="v-count" id="vCount"></span><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
     <div class="g-track" id="vTrack"></div>
   </dialog>
 
   <dialog id="editor" aria-labelledby="eTitle">
-    <div class="dlg-head"><h2 id="eTitle">إضافة سيارة</h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
-    <form class="dlg-body form" id="carForm" novalidate>
-      <label>الماركة<select id="e-brand" name="brand" required></select></label>
-      <label id="e-brand-other-wrap" hidden>اسم الماركة<input id="e-brand-other" placeholder="اكتب الماركة بالإنجليزي"></label>
-      <label>الموديل<input id="e-model" name="model" required placeholder="Sorento"></label>
+    <div class="dlg-head"><h2 id="eTitle">إضافة سيارة</h2><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
+    <form class="dlg-body form" id="carForm" novalidate="">
+      <label>الماركة<select id="e-brand" name="brand" required=""></select></label>
+      <label id="e-brand-other-wrap" hidden="">اسم الماركة<input id="e-brand-other" placeholder="اكتب الماركة بالإنجليزي"></label>
+      <label>الموديل<input id="e-model" name="model" required="" placeholder="Sorento"></label>
       <label>الفئة / التريم<input id="e-trim" name="trim" placeholder="Signature"></label>
       <label>سنة الصنع<input id="e-year" name="year" type="number" inputmode="numeric" placeholder="2023"></label>
       <label>الممشى (كم)<input id="e-km" name="km" type="number" inputmode="numeric" placeholder="35000"></label>
@@ -713,14 +714,14 @@ dl.spec dd{font-weight:500}
       <label>العملة<select id="e-currency" name="currency"><option value="EGP">جنيه مصري</option><option value="SAR">ريال سعودي</option><option value="USD">دولار</option><option value="KRW">وون كوري</option></select></label>
       <label>سعر العربية في كوريا (وون)<input id="e-krw" name="krw" type="number" inputmode="numeric" placeholder="25000000"></label>
       <label>طريقة التسعير<select id="e-mode"><option value="">سعر يدوي</option><option value="sa">معادلة السعودية (توصيل الرياض)</option><option value="eg">معادلة مصر</option></select></label>
-      <div class="calc" id="e-calc" hidden></div>
+      <div class="calc" id="e-calc" hidden=""></div>
       <label class="wide">ملاحظات تظهر للعميل<textarea id="e-note" name="note" placeholder="الكماليات، حالة الكاوتش، الضمان…"></textarea></label>
       <label class="wide">رابط فيديو العربية (تيك توك، يوتيوب، إنستجرام — اختياري)<input id="e-video" name="video" type="url" inputmode="url" placeholder="https://www.tiktok.com/@afandinamotors2024/video/…"></label>
       <div class="wide" style="display:grid;gap:8px">
         <span style="font-size:.85rem;color:var(--muted)">الصور (أول صورة هي الغلاف)</span>
         <div class="photos" id="e-photos"></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input type="file" id="e-file" accept="image/*" multiple>
+          <input type="file" id="e-file" accept="image/*" multiple="">
           <span id="e-upmsg" style="font-size:.85rem;color:var(--muted)"></span>
         </div>
       </div>
@@ -728,24 +729,24 @@ dl.spec dd{font-weight:500}
         <span style="font-size:.85rem;color:var(--muted)">صور تقرير الفحص الكوري (성능점검기록부) — تظهر للعميل في قسم «تقرير الفحص»</span>
         <div class="photos" id="e-report"></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <input type="file" id="e-rfile" accept="image/*" multiple>
+          <input type="file" id="e-rfile" accept="image/*" multiple="">
           <span id="e-rmsg" style="font-size:.85rem;color:var(--muted)"></span>
         </div>
       </div>
     </form>
     <div class="dlg-foot">
       <button class="btn btn-accent" type="button" id="saveCar">حفظ ونشر</button>
-      <button class="btn btn-line" type="button" data-close>إلغاء</button>
+      <button class="btn btn-line" type="button" data-close="">إلغاء</button>
       <span id="e-msg" style="align-self:center;font-size:.88rem;color:var(--sold)"></span>
     </div>
   </dialog>
 
   <dialog id="manager" aria-labelledby="mTitle">
-    <div class="dlg-head"><h2 id="mTitle">إدارة السيارات</h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="dlg-head"><h2 id="mTitle">إدارة السيارات</h2><button class="x" type="button" data-close="" aria-label="إغلاق">×</button></div>
     <div class="dlg-body" id="mBody"></div>
   </dialog>
 </template>
-<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أبيض","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af","t":"8bda9a3cb3f14383ca7bf97d593104a9"},{"id":"bd781a83b6c520106a20424444410360","t":"4022526edcb5d9b8a8e27a04df5efa82"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3","t":"a9c3b75fcfed76462437f89c9b3defb4"},{"id":"eca45726c385d3aa11df32fff9e9bad4","t":"547716cc34dd8b7dabc211e676da5f45"},{"id":"6c90938c17bcc32f91354805bc3a1658","t":"63288d042c72023666791469cd5c76e0"},{"id":"e00ef68850417dc829a5e86c152dbbd7","t":"cd3f347555986f1f9a504638ca0ba636"},{"id":"04026d96f1ed17ab4564c78dca68f8cc","t":"a1a3c783730215d336d9f8c3a9e2fd80"},{"id":"9a3e6c537478fc6db459b5b9815d3b23","t":"733c426de7b95fde56195211902ba2f7"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7","t":"f7ac90235611870c60451c55540ea1dc"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332","t":"a104c078c34af16d09dbc36a3ebc497b"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f","t":"ab951c7f2eff8f9c62d63874cb3b1e9d"},{"id":"d1acf962fad575d6654451af18c972db","t":"c47825fbf8f03dd7fda72971f744b9ce"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c","t":"531f8bbafe288d2847aeaf4f903e063f"}],"added":6,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-green","brand":"Kia","model":"Sorento","trim":"x line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أخضر زيتي","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، كاميرات 360، ستائر شمس للأبواب الخلفية.","photos":[{"id":"43ab95d44a27b2aa62948ddee682f586","t":"8c3022111807f1dc4c4c7ed20efb70a6"},{"id":"0aaef93264c398697526783381b3a6cd","t":"fecd2752dbb50686f44e654bbcdb900a"},{"id":"3b6bdda81fc632f7f0907ad8fbe4f626","t":"9772373f0d47af949edbeb78b187819a"},{"id":"4866fb884111f42f9c29c7d861e7846a","t":"dcece3feff65d9f3cd8e6848f90fd07b"},{"id":"f56c2d4661faee4006a6db72feac4523","t":"896d72e0ebb58074ac53c572273da8f6"},{"id":"f93dc6342b482f538e815741ba7911a4","t":"6afa0d790aebcb2655f809a569b7a3af"},{"id":"d22748db71db97d556792074ff137671","t":"6ecd58f239ab9693bbc9ffdbf0c0f961"},{"id":"730b92ce46c4b7d13092009b5ff82cb2","t":"b30196e9608fbaba8caafefd9b73e574"},{"id":"d711773c8213b4c2767aaf21b037611b","t":"f9ac1761d4a41fc93bdc59c97e3e2136"},{"id":"5990f2741a6e65a27c4df7dac93fab32","t":"83d9038c8da61c8f8f4f8dc38f929dcd"},{"id":"3588814c7c28ea8f6bc8b3eb4ffbca93","t":"efee15a43e164671ddc9d78aa4550f2d"}],"added":7,"sample":false,"addedAt":"2026-11-26"}],"pricing":{}}</script>
+<script type="application/json" id="inventory">{"cars":[{"id":"sorento-2026-white","brand":"Kia","model":"Sorento","trim":"X-Line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أبيض","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، ستائر شمس للأبواب الخلفية.","photos":[{"id":"19da50f18d264801ad50d835901597af","t":"8bda9a3cb3f14383ca7bf97d593104a9"},{"id":"bd781a83b6c520106a20424444410360","t":"4022526edcb5d9b8a8e27a04df5efa82"},{"id":"4ab4bd39d812f7a5aefc55ed2284dbc3","t":"a9c3b75fcfed76462437f89c9b3defb4"},{"id":"eca45726c385d3aa11df32fff9e9bad4","t":"547716cc34dd8b7dabc211e676da5f45"},{"id":"6c90938c17bcc32f91354805bc3a1658","t":"63288d042c72023666791469cd5c76e0"},{"id":"e00ef68850417dc829a5e86c152dbbd7","t":"cd3f347555986f1f9a504638ca0ba636"},{"id":"04026d96f1ed17ab4564c78dca68f8cc","t":"a1a3c783730215d336d9f8c3a9e2fd80"},{"id":"9a3e6c537478fc6db459b5b9815d3b23","t":"733c426de7b95fde56195211902ba2f7"},{"id":"4dac11f22e7ad164ef1140afc6cc39a7","t":"f7ac90235611870c60451c55540ea1dc"},{"id":"bf1ea337cbd0aacb2eadcb0e80e9b332","t":"a104c078c34af16d09dbc36a3ebc497b"},{"id":"1c11cbad9ff2338d2cd276b4117fe49f","t":"ab951c7f2eff8f9c62d63874cb3b1e9d"},{"id":"d1acf962fad575d6654451af18c972db","t":"c47825fbf8f03dd7fda72971f744b9ce"},{"id":"9a0cdc64a2d008bb5e0301e4bdfb303c","t":"531f8bbafe288d2847aeaf4f903e063f"}],"added":6,"sample":false,"addedAt":"2026-11-26"},{"id":"sorento-2026-green","brand":"Kia","model":"Sorento","trim":"x line","year":2026,"km":0,"body":"suv","cc":1600,"hp":235,"fuel":"hybrid","trans":"6 سرعات اتوماتيك عادي","drive":"fwd","seats":7,"color":"أخضر زيتي","interior":"بني (كاميل)","inspection":"زيرو","branch":"eg-10r","status":"available","price":null,"currency":"EGP","note":"متاحة في معرض العاشر من رمضان (سكاي دجلة مول).\nمن الكماليات:\nsorento 2026 x line \n سقف بانوراما، نظام صوت KRELL، فرش جلد بني، كراسي كهربا، مرآة داخلية رقمية، كاميرات 360، ستائر شمس للأبواب الخلفية.","photos":[{"id":"43ab95d44a27b2aa62948ddee682f586","t":"8c3022111807f1dc4c4c7ed20efb70a6"},{"id":"0aaef93264c398697526783381b3a6cd","t":"fecd2752dbb50686f44e654bbcdb900a"},{"id":"3b6bdda81fc632f7f0907ad8fbe4f626","t":"9772373f0d47af949edbeb78b187819a"},{"id":"4866fb884111f42f9c29c7d861e7846a","t":"dcece3feff65d9f3cd8e6848f90fd07b"},{"id":"f56c2d4661faee4006a6db72feac4523","t":"896d72e0ebb58074ac53c572273da8f6"},{"id":"f93dc6342b482f538e815741ba7911a4","t":"6afa0d790aebcb2655f809a569b7a3af"},{"id":"d22748db71db97d556792074ff137671","t":"6ecd58f239ab9693bbc9ffdbf0c0f961"},{"id":"730b92ce46c4b7d13092009b5ff82cb2","t":"b30196e9608fbaba8caafefd9b73e574"},{"id":"d711773c8213b4c2767aaf21b037611b","t":"f9ac1761d4a41fc93bdc59c97e3e2136"},{"id":"5990f2741a6e65a27c4df7dac93fab32","t":"83d9038c8da61c8f8f4f8dc38f929dcd"},{"id":"3588814c7c28ea8f6bc8b3eb4ffbca93","t":"efee15a43e164671ddc9d78aa4550f2d"}],"added":7,"sample":false,"addedAt":"2026-11-26"}],"pricing":{},"reviews":[{"id":"rmwz5pk8e","url":"https://youtube.com/shorts/BuVXWx4UbQc?si=QCVZeKMJOSJ7wv6G","name":"م محمد","city":"كفر الشيخ","car":"sportage 2026","quote":"انا وثقت في شركه افندينا انها تصمم لي السياره من المصنع"}]}</script>
 <div id="app"></div>
 <script id="main">
 (function(){
@@ -1250,7 +1251,7 @@ function renderReviews(){
   $("rvRow").replaceChildren(...list.map(r=>{const v=videoInfo(r.url);
     const cov=r.cover&&r.cover.id?thumbUrl(r.cover):v.thumb;
     const img=cov?h("img",{src:cov,alt:"",loading:"lazy"}):null;
-    if(img)img.addEventListener("error",()=>img.remove());
+    if(img)img.addEventListener("error",()=>{if(/\/oar2\.jpg$/.test(img.src))img.src=img.src.replace(/oar2\.jpg$/,"hqdefault.jpg");else img.remove()});
     const play=h("button",{class:"rv-play",type:"button","aria-label":"شغّل فيديو "+(r.name||"العميل")},h("span",{class:"rv-logo","aria-hidden":"true"},"AFANDINA"),img,h("span",{class:"rv-btn"},svg(ICON_PLAY)),h("span",{class:"rv-src"},v.kind));
     play.addEventListener("click",()=>playReview(r));
     return h("article",{class:"rv-card"},play,h("div",{class:"rv-body"},
@@ -1544,6 +1545,4 @@ $("manage").addEventListener("click",openManager);
   }catch(e){}
 })();
 })();
-</script>
-
-</body></html>
+</script></body></html>
