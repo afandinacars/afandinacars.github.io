@@ -59,7 +59,7 @@ head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<meta name="google-site-verification" content="xJOs4wAqrjDSPvfuxRlrdN_bTEex_lm_G-FJCN1y9n0"><meta name="google-site-verification" content="nUfveMpW1XCtvaza4jiRvvQbSfW8YXLcH7AOXUxS6VM">'
  '<link rel="icon" href="assets/logo.png">'
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
- '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "56777a6ca5a145afb55a2e568a230ffe"}\'></script>'
+ '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "a8d65ec403f14ea3a96d7f4250d69be2"}\'></script>'
  '</head><body>')
 out=head+s+'</body></html>'
 os.makedirs(os.path.join(repo,'assets','cars'),exist_ok=True)
