@@ -9,6 +9,18 @@ i=s.find('<title>');
 if i>0: s=s[i:]
 s=re.sub(r'</body></html>\s*$','',s)
 s=s.replace('https://afandinacars.github.io/','https://afandinacars.com/')
+
+# --- per-car view tracking: each opened car becomes its own page path (/car/<id>/),
+# which Cloudflare Web Analytics counts (it patches history.pushState).
+_TRK=[
+ ('if(!fromHash){try{history.replaceState(null,"","#car-"+c.id)}catch(e){location.hash="car-"+c.id}}',
+  'if(fromHash!=="pop"){try{if(fromHash)history.replaceState(null,"","/");history.pushState({car:c.id},"","/car/"+c.id+"/")}catch(e){}}'),
+ ('$("detail").addEventListener("close",()=>{if(location.hash.startsWith("#car-")){try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}});',
+  '$("detail").addEventListener("close",()=>{if(location.pathname.startsWith("/car/")||location.hash.startsWith("#car-")){try{history.replaceState(null,"","/")}catch(e){}}});\nwindow.addEventListener("popstate",()=>{const m=location.pathname.match(/^\\/car\\/([A-Za-z0-9-]+)\\/?$/);const d=$("detail");if(m){if(!d.open)openCar(m[1],"pop")}else if(d.open)d.close()});'),
+]
+for _a,_b in _TRK:
+    if _a in s: s=s.replace(_a,_b)
+    else: print("WARN: tracking hook not found", file=sys.stderr)
 # --- keep internal pricing out of the public copy: work out each final price here,
 # then drop Korea prices, formulas, margins and commissions from the published data.
 import math
@@ -54,7 +66,7 @@ head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
  f'<meta name="description" content="{desc}"><meta property="og:title" content="أفندينا موتورز — معرض السيارات">'
  f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.com/assets/og-cover.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:type" content="website"><meta property="og:url" content="https://afandinacars.com/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://afandinacars.com/assets/og-cover.jpg"><meta name="theme-color" content="#002838"><link rel="apple-touch-icon" href="assets/logo-t.png">'
- '<title>أفندينا موتورز | سيارات كورية مفحوصة في مصر والسعودية</title>'
+ '<base href="/"><title>أفندينا موتورز | سيارات كورية مفحوصة في مصر والسعودية</title>'
  '<link rel="canonical" href="https://afandinacars.com/">'
  '<meta name="google-site-verification" content="xJOs4wAqrjDSPvfuxRlrdN_bTEex_lm_G-FJCN1y9n0"><meta name="google-site-verification" content="nUfveMpW1XCtvaza4jiRvvQbSfW8YXLcH7AOXUxS6VM">'
  '<link rel="icon" href="assets/logo.png">'
