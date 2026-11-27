@@ -71,6 +71,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .btn-line{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .btn-danger{background:transparent;color:var(--sold);border:1px solid var(--sold)}
 .btn-sm{padding:.4rem .75rem;font-size:.88rem;border-radius:8px}
+.hero-main{padding:.8rem 1.4rem;font-size:1.05rem;box-shadow:0 10px 26px -10px rgba(196,35,32,.6)}
+.hero-arrow{display:inline-block;font-size:1.1em}
+@media (prefers-reduced-motion:no-preference){.hero-arrow{animation:nudge 1.8s ease-in-out infinite}@keyframes nudge{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}}
 .btn svg{width:18px;height:18px;flex:none}
 
 /* filters */
@@ -1083,8 +1086,7 @@ function render(){
     $("r-msg").style.color="var(--ok)";$("r-msg").textContent="اتفتح واتساب برسالة الطلب، دوس إرسال من هناك.";
   });}
 $("heroCta").append(
-  h("a",{class:"btn btn-wa",href:waLink("eg"),target:"_blank",rel:"noopener"},svg(ICON.wa),"واتساب مصر"),
-  h("a",{class:"btn btn-wa",href:waLink("sa"),target:"_blank",rel:"noopener"},svg(ICON.wa),"واتساب السعودية"),
+  h("a",{class:"btn btn-accent hero-main",href:"#cars"},"شوف العربيات المتاحة",h("span",{"aria-hidden":"true",class:"hero-arrow"},"↓")),
   h("a",{class:"btn btn-ghost",href:"#request"},"اطلب عربية مش معروضة"));
 
 /* branches */
