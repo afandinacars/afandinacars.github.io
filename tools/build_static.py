@@ -34,9 +34,24 @@ def _public_inventory(html):
     m=re.search(pat,html,re.S); inv=json.loads(m.group(2).replace('\\u003c','<'))
     P=inv.get('pricing') or {}; E=P.get('eg') or {}
     for c in inv.get('cars',[]):
-        mode='eg' if c.get('auto')=='eg' else ('sa' if c.get('auto') else '')
+        mode='both' if c.get('auto')=='both' else ('eg' if c.get('auto')=='eg' else ('sa' if c.get('auto') else ''))
         krw=_num(c.get('krw')); rate=_num(P.get('krwPerUsd'))
-        if mode and krw and rate:
+        if mode=='both':
+            # customer picks Egypt or Saudi on the page: publish both final prices, never the inputs
+            c['prices']=None
+            if krw and rate:
+                car=krw/rate
+                usd=car+_num(P.get('shipKorea'))+car*_num(P.get('customsPct'))/100+car*_num(P.get('vatPct'))/100+_num(P.get('shipSaudi'))+_num(P.get('clearance'))+_num(P.get('marginUsd'))
+                r=_num(P.get('roundSar'),1) or 1
+                sa={'price':_int(_r(usd*_num(P.get('sarPerUsd'),3.75)/r)*r),'currency':'SAR','note':'شامل التوصيل للرياض'}
+                usd=car+_num(E.get('shipping'))+_num(E.get('clearance'))+_num(E.get('commission'))
+                r=_num(E.get('roundTo'),1) or 1; egp=_num(E.get('egpPerUsd'))
+                eg={'price':_int(_r(usd*egp/r)*r),'currency':'EGP'} if egp>0 else {'price':_int(_r(usd/r)*r),'currency':'USD'}
+                eg['note']=E.get('note') or ''
+                c['prices']={'eg':eg,'sa':sa}; c['price']=eg['price']; c['currency']=eg['currency']
+            else:
+                c.pop('prices',None); c['price']=None
+        elif mode and krw and rate:
             car=krw/rate
             if mode=='sa':
                 usd=car+_num(P.get('shipKorea'))+car*_num(P.get('customsPct'))/100+car*_num(P.get('vatPct'))/100+_num(P.get('shipSaudi'))+_num(P.get('clearance'))+_num(P.get('marginUsd'))
