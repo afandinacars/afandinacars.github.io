@@ -78,7 +78,7 @@ def _public_inventory(html):
     js=json.dumps(inv,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')
     return re.sub(pat,lambda mm:mm.group(1)+js+mm.group(3),html,count=1,flags=re.S)
 s=_public_inventory(s)
-KNOWN={"f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","c609bd84c88433314a1323d4fdd3fff5":"assets/logo-t.webp","cdb8170f55023d47599e147bc23f4ff5":"assets/hero-bmw.webp",
+KNOWN={"43ce979ae4700c1474f04c4c11e87196":"assets/hero-afandina-m.webp","7216f71d0d1bdafae55dc810ea6283b6":"assets/hero-afandina.webp","f12fd7cb2e7041627339683dc8e6eb93":"assets/logo.png","c609bd84c88433314a1323d4fdd3fff5":"assets/logo-t.webp","cdb8170f55023d47599e147bc23f4ff5":"assets/hero-bmw.webp",
 "0e99f9110f08e3ba07e3c220ecff476e":"assets/hero-kia.webp","4da07f430d881867717866663b27b1dd":"assets/hero-hyundai.webp","6dc41e5ecf90127c52759db6d298104d":"assets/hero-amg.webp"}
 for k,v in KNOWN.items(): s=s.replace('/_blob/'+k,v)
 
@@ -86,7 +86,7 @@ for k,v in KNOWN.items(): s=s.replace('/_blob/'+k,v)
 _FONT=re.search(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com/[^"]+">',s)
 _fontlink=_FONT.group(0) if _FONT else ''
 if _FONT: s=s.replace(_fontlink,'',1)
-s=s.replace('<img src="assets/hero-bmw.webp" alt=""','<img src="assets/hero-bmw.webp" alt="" fetchpriority="high"',1)
+s=s.replace('<img src="assets/hero-afandina.webp" alt=""','<img src="assets/hero-afandina.webp" alt="" fetchpriority="high"',1)
 s=s.replace('const photoUrl=p=>p&&p.id?"/_blob/"+encodeURIComponent(p.id):"";','const photoUrl=p=>p&&p.id?"assets/cars/"+encodeURIComponent(p.id)+".jpg":"";')
 s=s.replace('const thumbUrl=p=>p&&(p.t||p.id)?"/_blob/"+encodeURIComponent(p.t||p.id):"";','const thumbUrl=p=>p&&(p.t||p.id)?"assets/cars/"+encodeURIComponent(p.t||p.id)+".jpg":"";')
 assert '/_blob/' not in s.split('<script id="main">')[0], 'unmapped blob in markup'
@@ -100,7 +100,7 @@ head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<meta name="google-site-verification" content="xJOs4wAqrjDSPvfuxRlrdN_bTEex_lm_G-FJCN1y9n0"><meta name="google-site-verification" content="nUfveMpW1XCtvaza4jiRvvQbSfW8YXLcH7AOXUxS6VM">'
  '<link rel="icon" href="assets/logo.png">'
  '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
- '<link rel="preload" as="image" href="assets/hero-bmw.webp" fetchpriority="high"><link rel="preload" as="image" href="assets/logo-t.webp">'
+ '<link rel="preload" as="image" href="assets/hero-afandina.webp" fetchpriority="high"><link rel="preload" as="image" href="assets/logo-t.webp">'
  +_fontlink+
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
  '<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon=\'{"token": "a8d65ec403f14ea3a96d7f4250d69be2"}\'></script>'
