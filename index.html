@@ -341,7 +341,7 @@ dl.spec dd{font-weight:500}
 .admin-bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-block:8px;font-size:.9rem}
 .form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .form label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);min-width:0}
-.form label.wide{grid-column:1/-1}
+.form label.wide,.form>div.wide{grid-column:1/-1}
 .form input,.form select,.form textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:.5rem .65rem;color:var(--ink);min-width:0;width:100%}
 .form textarea{min-height:80px;resize:vertical}
 .photos{display:flex;gap:8px;flex-wrap:wrap}
@@ -376,6 +376,69 @@ dl.spec dd{font-weight:500}
   .rv.below{transform:translateY(26px)}
 }
 @media (prefers-reduced-motion:no-preference){.card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}.card:hover{transform:translateY(-4px)}}
+
+/* quick filters */
+.quick{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;margin-inline:-2px;padding-inline:2px}
+.quick::-webkit-scrollbar{display:none}
+.quick:empty{display:none}
+.qchip{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:.42rem .9rem;font-size:.9rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .15s ease,border-color .15s ease,color .15s ease}
+.qchip small{color:var(--muted);font-family:var(--f-mono);font-size:.75rem}
+.qchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.qchip[aria-pressed="true"] small{color:inherit;opacity:.75}
+/* recently viewed */
+.recent{padding-bottom:1rem}
+.recent h2{font-size:1rem;font-weight:700;margin-bottom:.6rem;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.recent h2 button{border:0;background:none;color:var(--muted);font-size:.82rem;cursor:pointer;font-family:var(--f-body);font-weight:400}
+.recent-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}
+.mini{flex:none;width:200px;scroll-snap-align:start;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px;cursor:pointer;text-align:start;color:var(--ink)}
+.mini img,.mini .sil-box{width:64px;height:64px;border-radius:8px;object-fit:cover;flex:none;background:var(--chip)}
+.mini b{display:block;font-size:.86rem;line-height:1.3}
+.mini span{display:block;font-size:.76rem;color:var(--muted)}
+/* swipe gallery */
+.gallery .main{display:block}
+.g-track{display:flex;width:100%;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+.g-track::-webkit-scrollbar{display:none}
+.g-slide{flex:0 0 100%;height:100%;scroll-snap-align:center;position:relative;overflow:hidden;display:grid;place-items:center;cursor:zoom-in}
+.g-slide>*{grid-area:1/1}
+.g-count{position:absolute;bottom:10px;inset-inline-start:10px;z-index:2;background:rgba(0,0,0,.6);color:#fff;font-family:var(--f-mono);font-size:.78rem;border-radius:999px;padding:.15rem .6rem;direction:ltr}
+.g-full{position:absolute;top:10px;inset-inline-start:10px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center;cursor:pointer}
+.g-full svg{width:18px;height:18px}
+.g-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#0B1E28;display:grid;place-items:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.g-nav svg{width:18px;height:18px}
+.g-nav.prev{inset-inline-start:10px}.g-nav.next{inset-inline-end:10px}
+@media (hover:none){.g-nav{display:none}}
+/* full-screen viewer */
+#viewer{width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;border-radius:0;background:#05090c;color:#fff;overflow:hidden}
+#viewer::backdrop{background:#05090c}
+.v-top{position:absolute;top:0;inset-inline:0;z-index:3;display:flex;justify-content:space-between;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,rgba(0,0,0,.6),rgba(0,0,0,0))}
+.v-top .x{background:rgba(255,255,255,.16);color:#fff}
+.v-count{font-family:var(--f-mono);font-size:.9rem;direction:ltr}
+#viewer .g-track{height:100%}
+#viewer .g-slide{cursor:default;overflow:auto;touch-action:pan-x pan-y pinch-zoom}
+#viewer .g-slide img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+#viewer .g-nav{background:rgba(255,255,255,.16);color:#fff;box-shadow:none}
+/* inspection report + video */
+.report{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:10px}
+.report h3{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.report h3 svg{width:20px;height:20px;color:var(--ok)}
+.report p{margin:0;color:var(--muted);font-size:.86rem}
+.report-row{display:flex;gap:8px;overflow-x:auto}
+.report-row button{flex:none;width:88px;height:116px;border:1px solid var(--line);border-radius:8px;overflow:hidden;padding:0;cursor:zoom-in;background:var(--chip)}
+.report-row img{width:100%;height:100%;object-fit:cover}
+.btn-video{background:#0B1E28;color:#fff}
+:root[data-theme="dark"] .btn-video{background:#E5ECF0;color:#0B1E28}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn-video{background:#E5ECF0;color:#0B1E28}}
+.btn-video svg{width:16px;height:16px}
+/* sticky contact bar in car details (phones) */
+.d-bar{display:none}
+@media (max-width:760px){
+  .d-bar{display:flex;gap:8px;position:sticky;bottom:0;z-index:3;background:var(--surface);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -8px 20px -12px rgba(0,0,0,.3)}
+  .d-bar:empty{display:none}
+  .d-bar .btn{flex:1;padding-block:.75rem}
+  .d-bar .btn-icon{flex:none;width:48px;padding-inline:0}
+  #detail .detail-cta{display:none}
+}
+.btn-notify{background:var(--brass);color:#fff}
 </style>
 <template id="shell">
   <div class="admin-bar" id="adminBar" hidden>
@@ -441,7 +504,9 @@ dl.spec dd{font-weight:500}
         </select></label>
         <label class="check"><input type="checkbox" id="fSold"> إظهار المباع</label>
       </div>
+      <div class="quick" id="quick" role="group" aria-label="فلاتر سريعة"></div>
     </div>
+    <section class="recent" id="recent" hidden aria-labelledby="recentTitle"><h2 id="recentTitle">شُفتها مؤخراً<button type="button" id="recentClear">مسح</button></h2><div class="recent-row" id="recentRow"></div></section>
     <div class="result-line"><span id="count"></span><div class="chips" id="chips"></div></div>
     <section class="grid" id="grid" aria-live="polite"></section>
     <div class="more-wrap" id="moreWrap" hidden><button class="btn btn-line more-btn" id="moreBtn" type="button">عرض المزيد</button></div>
@@ -572,6 +637,11 @@ dl.spec dd{font-weight:500}
   <dialog id="detail" aria-labelledby="dTitle">
     <div class="dlg-head"><h2 id="dTitle"></h2><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
     <div class="dlg-body" id="dBody"></div>
+    <div class="d-bar" id="dBar"></div>
+  </dialog>
+  <dialog id="viewer" aria-label="عرض الصور">
+    <div class="v-top"><span class="v-count" id="vCount"></span><button class="x" type="button" data-close aria-label="إغلاق">×</button></div>
+    <div class="g-track" id="vTrack"></div>
   </dialog>
 
   <dialog id="editor" aria-labelledby="eTitle">
@@ -601,12 +671,21 @@ dl.spec dd{font-weight:500}
       <label>طريقة التسعير<select id="e-mode"><option value="">سعر يدوي</option><option value="sa">معادلة السعودية (توصيل الرياض)</option><option value="eg">معادلة مصر</option></select></label>
       <div class="calc" id="e-calc" hidden></div>
       <label class="wide">ملاحظات تظهر للعميل<textarea id="e-note" name="note" placeholder="الكماليات، حالة الكاوتش، الضمان…"></textarea></label>
+      <label class="wide">رابط فيديو العربية (تيك توك، يوتيوب، إنستجرام — اختياري)<input id="e-video" name="video" type="url" inputmode="url" placeholder="https://www.tiktok.com/@afandinamotors2024/video/…"></label>
       <div class="wide" style="display:grid;gap:8px">
         <span style="font-size:.85rem;color:var(--muted)">الصور (أول صورة هي الغلاف)</span>
         <div class="photos" id="e-photos"></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <input type="file" id="e-file" accept="image/*" multiple>
           <span id="e-upmsg" style="font-size:.85rem;color:var(--muted)"></span>
+        </div>
+      </div>
+      <div class="wide" style="display:grid;gap:8px">
+        <span style="font-size:.85rem;color:var(--muted)">صور تقرير الفحص الكوري (성능점검기록부) — تظهر للعميل في قسم «تقرير الفحص»</span>
+        <div class="photos" id="e-report"></div>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <input type="file" id="e-rfile" accept="image/*" multiple>
+          <span id="e-rmsg" style="font-size:.85rem;color:var(--muted)"></span>
         </div>
       </div>
     </form>
@@ -788,7 +867,7 @@ function renderChips(){
   if($("fSold").checked){add("يشمل","المباع");list[list.length-1].addEventListener("click",()=>{$("fSold").checked=false;render()})}
   if(favView){add("عرض","المفضلة");list[list.length-1].addEventListener("click",()=>{favView=false;render()})}
   const active=list.length;
-  if(active>1){const c=h("button",{class:"chip clear",type:"button"},"مسح الكل");c.addEventListener("click",()=>{for(const id of FILTER_IDS){const el=$(id);if(el.type==="checkbox")el.checked=false;else if(id!=="fSort")el.value=""}favView=false;shown=PAGE;render()});list.push(c)}
+  if(active>1){const c=h("button",{class:"chip clear",type:"button"},"مسح الكل");c.addEventListener("click",()=>{qf.clear();for(const id of FILTER_IDS){const el=$(id);if(el.type==="checkbox")el.checked=false;else if(id!=="fSort")el.value=""}favView=false;shown=PAGE;render()});list.push(c)}
   if(favs.size&&!favView){const f=h("button",{class:"chip",type:"button"},svg(ICON_HEART),"المفضلة ("+favs.size+")");f.querySelector("svg").setAttribute("style","width:14px;height:14px;color:#E0342C;--ff:1");f.addEventListener("click",()=>{favView=true;shown=PAGE;render()});list.push(f)}
   box.replaceChildren(...list);
   const n=["fBrand","fBody","fBranch","fFuel","fYear"].filter(id=>$(id).value).length+($("fSold").checked?1:0);
@@ -827,6 +906,7 @@ function filtered(){
     if(fu&&c.fuel!==fu)return false;
     if(yr&&!((c.year||0)>=yr))return false;
     if(favOnly&&!favs.has(c.id))return false;
+    if(qf.size&&!quickPass(c))return false;
     if(q){const hay=hayOf(c);if(!q.split(/\s+/).filter(Boolean).every(w=>hay.includes(w)))return false}
     return true;
   });
@@ -848,7 +928,7 @@ function card(c){
       h("div",{class:"where"},svg(ICON.pin),(BRANCHES[c.branch]||{}).name||""),
       h("div",{class:"card-actions"},
         h("button",{class:"btn btn-line",type:"button",onclick:()=>openCar(c.id)},"التفاصيل"),
-        c.status!=="sold"?waBtns(c)[0]:null)
+        c.status!=="sold"?waBtns(c)[0]:notifyBtn(c))
     ));
 }
 
@@ -857,7 +937,7 @@ function render(){
   const grid=$("grid");
   grid.replaceChildren(...(list.length?list.map(card):[h("div",{class:"empty"},favView?"لسه مضفتش عربيات للمفضلة. دوس على ♡ فوق صورة أي عربية.":state.cars.length?($("fBrand").value?"مفيش "+$("fBrand").value+" معروضة دلوقتي، بس نقدر نجيبهالك من كوريا. ابعتلنا المواصفات على واتساب.":"مفيش عربيات بالمواصفات دي حالياً. اطلبها من فورم «اطلب عربيتك» تحت، وإحنا نجيبهالك من كوريا."):"لسه مفيش عربيات معروضة. تابعنا أو كلمنا على واتساب.")]));
   $("count").textContent=(favView?"المفضلة: ":"")+all.length+" سيارة معروضة";
-  renderChips();renderCmpBar();
+  renderChips();renderCmpBar();renderQuick();renderRecent();
   const more=$("moreWrap");more.hidden=all.length<=shown;
   $("moreBtn").textContent="عرض المزيد ("+(all.length-shown)+" سيارة)";
   const avail=state.cars.filter(c=>c.status==="available");
@@ -946,32 +1026,142 @@ function setupReveal(root){
   els.forEach((el,i)=>{el.classList.add("rv");if(el.getBoundingClientRect().top>innerHeight){el.classList.add("below");el.style.transitionDelay=(i%4)*70+"ms";io.observe(el)}});
 }
 
+
+/* ---------- usability helpers ---------- */
+const ICON_SHARE=["0 0 24 24",'<path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>'];
+const ICON_EXPAND=["0 0 24 24",'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'];
+const ICON_PREV=["0 0 24 24",'<path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'];
+const ICON_NEXT=["0 0 24 24",'<path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'];
+const ICON_PLAY=["0 0 24 24",'<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>'];
+const ICON_BELL=["0 0 24 24",'<path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>'];
+const ICON_SHIELD=["0 0 24 24",'<path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6l7-3z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12.2l2.2 2.2 4.4-4.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'];
+const carUrl=c=>SITE_URL+"car/"+encodeURIComponent(c.id)+"/";
+const safeUrl=u=>{try{const x=new URL(String(u||"").trim());return x.protocol==="https:"?x.href:null}catch(e){return null}};
+/* 7) notify me when a similar car arrives (sold cars) */
+function notifyLink(c){
+  const b=BRANCHES[c.branch]||{};const key=b.phone==="sa"?"sa":"eg";
+  const msg=("مرحباً أفندينا موتورز، شفت "+title(c)+" "+(c.trim||"")+" موديل "+(c.year||"")+" على الموقع واتباعت.").replace(/\s+/g," ").trim()
+    +"\nعايز عربية زيها، بلغوني أول ما توصل واحدة شبهها."+(c.color?"\nاللون المفضل: "+c.color:"")+"\nكود: "+c.id+"\n"+carUrl(c);
+  return "https://wa.me/"+PHONES[key].wa+"?text="+encodeURIComponent(msg);
+}
+function notifyBtn(c,cls){return h("a",{class:"btn btn-notify "+(cls||""),href:notifyLink(c),target:"_blank",rel:"noopener"},svg(ICON_BELL),"نبّهني لما توصل زيها")}
+/* 5) share */
+async function shareCar(c){
+  const url=carUrl(c),text=title(c)+" "+(c.trim||"")+" "+(c.year||"")+" — أفندينا موتورز";
+  if(navigator.share){try{await navigator.share({title:text,text,url});return}catch(e){if(e&&e.name==="AbortError")return}}
+  try{await navigator.clipboard.writeText(url);toast("اتنسخ رابط العربية — ابعته لأي حد")}
+  catch(e){toast(url,6000)}
+}
+function shareBtn(c,cls,iconOnly){const b=h("button",{class:"btn "+(cls||"btn-line"),type:"button","aria-label":"مشاركة العربية",title:"مشاركة العربية"},svg(ICON_SHARE),iconOnly?null:"مشاركة");b.addEventListener("click",e=>{e.stopPropagation();shareCar(c)});return b}
+/* 6) recently viewed (kept on this device) */
+let recent=[];try{recent=JSON.parse(localStorage.getItem("afandina-recent")||"[]").filter(x=>typeof x==="string")}catch(e){}
+function pushRecent(id){recent=[id,...recent.filter(x=>x!==id)].slice(0,10);try{localStorage.setItem("afandina-recent",JSON.stringify(recent))}catch(e){}}
+function renderRecent(){
+  const list=recent.map(id=>state.cars.find(c=>c.id===id)).filter(Boolean);
+  $("recent").hidden=!list.length;
+  $("recentRow").replaceChildren(...list.map(c=>{const p=(c.photos||[])[0];const e=effPrice(c);
+    return h("button",{class:"mini",type:"button",onclick:()=>openCar(c.id)},p?h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}):h("span",{class:"sil-box"}),
+      h("div",null,h("b",null,title(c)+(c.year?" "+c.year:"")),h("span",null,c.status==="sold"?"مباعة":(e.price!=null&&e.price!==""?fmt(e.price)+" "+(CUR[e.currency]||e.currency||""):"السعر عند التواصل"))))}));
+}
+$("recentClear").addEventListener("click",()=>{recent=[];try{localStorage.removeItem("afandina-recent")}catch(e){}renderRecent()});
+/* 2) swipe gallery + full-screen viewer */
+function buildTrack(track,imgs,onIndex,zoomable){
+  track.replaceChildren(...imgs.map((src,i)=>{
+    const s=h("div",{class:"g-slide","data-i":i});
+    if(zoomable)s.append(h("img",{src,alt:"",loading:i<2?"eager":"lazy"}));
+    else s.append(h("img",{class:"bg",src,alt:"","aria-hidden":"true",loading:i<1?"eager":"lazy"}),h("img",{class:"fg",src,alt:"",loading:i<1?"eager":"lazy"}));
+    return s}));
+  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{for(const en of es)if(en.isIntersecting&&en.intersectionRatio>=.6)onIndex(Number(en.target.dataset.i))},{root:track,threshold:[.6]});
+    track.querySelectorAll(".g-slide").forEach(s=>io.observe(s))}
+}
+function goSlide(track,i,smooth){const s=track.children[i];if(!s)return;
+  const x=s.offsetLeft-track.offsetLeft;track.scrollTo({left:x,behavior:smooth&&!matchMedia("(prefers-reduced-motion: reduce)").matches?"smooth":"auto"})}
+function navBtns(track,count,getI){if(count<2)return[];
+  const prev=h("button",{class:"g-nav prev",type:"button","aria-label":"الصورة السابقة"},svg(ICON_PREV));
+  const next=h("button",{class:"g-nav next",type:"button","aria-label":"الصورة التالية"},svg(ICON_NEXT));
+  prev.addEventListener("click",e=>{e.stopPropagation();goSlide(track,(getI()-1+count)%count,true)});
+  next.addEventListener("click",e=>{e.stopPropagation();goSlide(track,(getI()+1)%count,true)});
+  return [prev,next]}
+let vIndex=0;
+function openViewer(imgs,start){
+  const v=$("viewer"),track=$("vTrack");vIndex=start||0;
+  const upd=i=>{vIndex=i;$("vCount").textContent=(i+1)+" / "+imgs.length};
+  buildTrack(track,imgs,upd,true);
+  v.querySelectorAll(".g-nav").forEach(b=>b.remove());
+  v.append(...navBtns(track,imgs.length,()=>vIndex));
+  upd(vIndex);v.showModal();requestAnimationFrame(()=>goSlide(track,vIndex,false));
+}
+$("viewer").addEventListener("keydown",e=>{const n=$("vTrack").children.length;if(e.key==="ArrowLeft")goSlide($("vTrack"),(vIndex+1)%n,true);if(e.key==="ArrowRight")goSlide($("vTrack"),(vIndex-1+n)%n,true)});
+/* 3) quick filters */
+const QUICK=[
+  {k:"eg",label:"في مصر",test:c=>(BRANCHES[c.branch]||{}).phone==="eg"||String(c.branch||"").startsWith("eg")},
+  {k:"sa",label:"في السعودية",test:c=>String(c.branch||"").startsWith("sa")},
+  {k:"kr",label:"في كوريا",test:c=>c.branch==="kr"},
+  {k:"new",label:"✦ وصل حديثاً",test:c=>isNew(c)},
+  {k:"suv",label:"SUV",test:c=>c.body==="suv"},
+  {k:"sedan",label:"سيدان",test:c=>c.body==="sedan"},
+  {k:"van",label:"عائلية",test:c=>c.body==="van"},
+  {k:"hybrid",label:"هايبرد",test:c=>c.fuel==="hybrid"},
+  {k:"ev",label:"كهرباء",test:c=>c.fuel==="ev"},
+  {k:"diesel",label:"ديزل",test:c=>c.fuel==="diesel"}];
+const QGROUP={eg:"place",sa:"place",kr:"place",new:"new",suv:"body",sedan:"body",van:"body",hybrid:"fuel",ev:"fuel",diesel:"fuel"};
+const qf=new Set();
+function quickPass(c){const groups={};for(const k of qf)(groups[QGROUP[k]]=groups[QGROUP[k]]||[]).push(k);
+  return Object.values(groups).every(ks=>ks.some(k=>QUICK.find(q=>q.k===k).test(c)))}
+function renderQuick(){
+  const pool=state.cars.filter(c=>$("fSold").checked||c.status!=="sold");
+  $("quick").replaceChildren(...QUICK.filter(q=>qf.has(q.k)||pool.some(q.test)).map(q=>{const n=pool.filter(q.test).length;
+    const b=h("button",{class:"qchip",type:"button","aria-pressed":String(qf.has(q.k))},q.label,h("small",null,n));
+    b.addEventListener("click",()=>{qf.has(q.k)?qf.delete(q.k):qf.add(q.k);shown=PAGE;render()});return b}));
+}
+
 /* ---------- detail ---------- */
 function openCar(id,fromHash){
   const c=state.cars.find(x=>x.id===id);if(!c)return;
+  pushRecent(c.id);
   $("dTitle").textContent=title(c)+(c.year?" "+c.year:"");
-  const photos=c.photos||[];
-  const show=p=>[h("img",{class:"bg",src:photoUrl(p),alt:"","aria-hidden":"true"}),h("img",{class:"fg",src:photoUrl(p),alt:title(c)})];
-  const main=h("div",{class:"main"},photos.length?show(photos[0]):cover(c));
-  const thumbs=h("div",{class:"thumbs"},photos.length>1?photos.map((p,i)=>{
-    const b=h("button",{type:"button","aria-current":i===0?"true":"false","aria-label":"صورة "+(i+1)},h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}));
-    b.addEventListener("click",()=>{main.replaceChildren(...show(p));thumbs.querySelectorAll("button").forEach(x=>x.setAttribute("aria-current",x===b?"true":"false"))});
-    return b}):[]);
+  const photos=c.photos||[];const full=photos.map(photoUrl);
+  let gi=0;
+  const track=h("div",{class:"g-track"});
+  const count=h("span",{class:"g-count"});
+  const thumbs=h("div",{class:"thumbs"});
+  const setI=i=>{gi=i;count.textContent=(i+1)+" / "+photos.length;thumbs.querySelectorAll("button").forEach((x,j)=>x.setAttribute("aria-current",j===i?"true":"false"));const b=thumbs.children[i];if(b&&b.scrollIntoView)b.scrollIntoView({block:"nearest",inline:"nearest"})};
+  let main;
+  if(photos.length){
+    buildTrack(track,full,setI,false);
+    track.addEventListener("click",()=>openViewer(full,gi));
+    const fs=h("button",{class:"g-full",type:"button","aria-label":"عرض الصور بملء الشاشة",title:"ملء الشاشة"},svg(ICON_EXPAND));
+    fs.addEventListener("click",e=>{e.stopPropagation();openViewer(full,gi)});
+    main=h("div",{class:"main"},track,photos.length>1?count:null,fs,...navBtns(track,photos.length,()=>gi));
+    if(photos.length>1)thumbs.append(...photos.map((p,i)=>{const b=h("button",{type:"button","aria-current":i===0?"true":"false","aria-label":"صورة "+(i+1)},h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}));b.addEventListener("click",()=>goSlide(track,i,true));return b}));
+  }else main=h("div",{class:"main",style:"display:grid"},cover(c));
   const rows=[["الفئة",c.trim],["الموديل",c.year&&h("span",{class:"num"},c.year)],["الممشى",c.km!=null&&c.km!==""&&h("span",null,h("span",{class:"num"},fmt(c.km))," كم")],
     ["المحرك",c.cc&&h("span",{class:"num"},fmt(c.cc)+" cc")],["القوة",c.hp&&h("span",null,h("span",{class:"num"},c.hp)," حصان")],["الوقود",FUEL[c.fuel]],
     ["ناقل الحركة",c.trans],["الدفع",DRIVE[c.drive]],["المقاعد",c.seats],["النوع",BODY[c.body]],["اللون",c.color],["الفرش",c.interior],["الفحص",c.inspection],["المكان",(BRANCHES[c.branch]||{}).name]]
     .filter(r=>r[1]!=null&&r[1]!==""&&r[1]!==false);
+  const rep=(c.report||[]).filter(p=>p&&p.id);
+  const report=rep.length?h("section",{class:"report"},
+    h("h3",null,svg(ICON_SHIELD),"تقرير الفحص الكوري"),
+    h("p",null,"صور تقرير الفحص الرسمي للعربية في كوريا (성능점검기록부). دوس على أي صورة لتكبيرها."),
+    h("div",{class:"report-row"},rep.map((p,i)=>{const b=h("button",{type:"button","aria-label":"صفحة "+(i+1)+" من تقرير الفحص"},h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}));b.addEventListener("click",()=>openViewer(rep.map(photoUrl),i));return b}))):null;
+  const vid=safeUrl(c.video);
+  const video=vid?h("a",{class:"btn btn-video",href:vid,target:"_blank",rel:"noopener"},svg(ICON_PLAY),"شوف فيديو العربية"):null;
+  const sold=c.status==="sold";
   $("dBody").replaceChildren(h("div",{class:"detail-grid"},
-    h("div",{class:"gallery"},main,thumbs,c.note&&h("div",{class:"note"},c.note)),
+    h("div",{class:"gallery"},main,thumbs,c.note&&h("div",{class:"note"},c.note),report),
     h("div",null,
-      h("div",{style:"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"},statusBadge(c),c.sample&&h("span",{class:"badge ex"},"مثال")),
+      h("div",{style:"display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"},statusBadge(c),isNew(c)&&!sold&&h("span",{class:"badge nw"},"✦ وصل حديثاً"),c.sample&&h("span",{class:"badge ex"},"مثال")),
       h("div",{class:"big-price"},priceNode(c)),
       h("div",{class:"code"},"كود السيارة: "+c.id),
-      h("div",{class:"d-tools"},favBtn(c,true),cmpBtn(c,true)),
+      h("div",{class:"d-tools"},favBtn(c,true),cmpBtn(c,true),shareBtn(c),video),
       h("dl",{class:"spec",style:"margin-top:12px"},rows.flatMap(r=>[h("dt",null,r[0]),h("dd",null,r[1])])),
-      h("div",{class:"detail-cta"},c.status!=="sold"?waBtns(c):h("div",{class:"note"},"العربية دي اتباعت. كلمنا ونجيبلك زيها.")))));
+      h("div",{class:"detail-cta"},!sold?waBtns(c):[h("div",{class:"note"},"العربية دي اتباعت. ابعتلنا ونبلغك أول ما توصل واحدة زيها."),notifyBtn(c)]))));
+  $("dBar").replaceChildren(...(!sold?waBtns(c):[notifyBtn(c)]),shareBtn(c,"btn-line btn-icon",true));
+  setI(0);
   const d=$("detail");if(!d.open)d.showModal();
+  d.scrollTop=0;
   if(fromHash!=="pop"){try{if(fromHash)history.replaceState(null,"","/");history.pushState({car:c.id},"","/car/"+c.id+"/")}catch(e){}}
+  renderRecent();
 }
 $("detail").addEventListener("close",()=>{if(location.pathname.startsWith("/car/")||location.hash.startsWith("#car-")){try{history.replaceState(null,"","/")}catch(e){}}});
 window.addEventListener("popstate",()=>{const m=location.pathname.match(/^\/car\/([A-Za-z0-9-]+)\/?$/);const d=$("detail");if(m){if(!d.open)openCar(m[1],"pop")}else if(d.open)d.close()});
@@ -989,7 +1179,7 @@ $("moreBtn").addEventListener("click",()=>{const before=document.querySelectorAl
 refreshBrandOptions();render();fromHash();setupReveal();
 
 /* ---------- admin ---------- */
-let artifactApi=null,assetsApi=null,editing=null,draftPhotos=[],busy=false;
+let artifactApi=null,assetsApi=null,editing=null,draftPhotos=[],draftReport=[],busy=false;
 {const sel=$("e-brand");sel.append(h("option",{value:""},"اختار الماركة"));
   for(const [label,list] of BRAND_GROUPS){const g=h("optgroup",{label});for(const [v,ar] of list)g.append(h("option",{value:v},v+" — "+ar));sel.append(g)}
   sel.append(h("option",{value:OTHER},"ماركة أخرى…"));
@@ -999,7 +1189,7 @@ fillSelect($("e-fuel"),Object.entries(FUEL));
 fillSelect($("e-drive"),Object.entries(DRIVE));
 fillSelect($("e-branch"),Object.entries(BRANCHES).map(([k,v])=>[k,v.name]));
 fillSelect($("e-status"),Object.entries(STATUS));
-const FIELDS=["brand","model","trim","year","km","body","cc","hp","fuel","trans","drive","seats","color","interior","inspection","branch","status","price","currency","note","krw"];
+const FIELDS=["brand","model","trim","year","km","body","cc","hp","fuel","trans","drive","seats","color","interior","inspection","branch","status","price","currency","note","krw","video"];
 const NUMS=new Set(["year","km","cc","hp","seats","price","krw"]);
 const usd=n=>"$"+Math.round(n).toLocaleString("en-US");
 function renderCalc(){
@@ -1040,6 +1230,7 @@ function buildDoc(){
     +'<script type="application/json" id="inventory">'+json+'<\/script>\n<div id="app"></div>\n'
     +document.getElementById("main").outerHTML+'</body></html>';
 }
+function carAssetIds(c){return photoIds(c.photos).concat(photoIds(c.report))}
 function photoIds(list){const out=[];for(const p of list||[]){if(p&&p.id)out.push(p.id);if(p&&p.t)out.push(p.t)}return out}
 async function dropAssets(ids){if(!assetsApi||!ids.length)return;for(const id of ids){try{await assetsApi.delete(id)}catch(e){}}}
 async function save(){
@@ -1084,6 +1275,23 @@ $("e-file").addEventListener("change",async e=>{
   }
   if(/جاري/.test($("e-upmsg").textContent))$("e-upmsg").textContent="";
 });
+function renderReport(){
+  $("e-report").replaceChildren(...draftReport.map((p,i)=>{
+    const rm=h("button",{type:"button","aria-label":"حذف الصورة"},"حذف");
+    rm.addEventListener("click",()=>{draftReport.splice(i,1);renderReport()});
+    return h("div",{class:"photo"},h("img",{src:thumbUrl(p),alt:""}),rm);
+  }));
+}
+$("e-rfile").addEventListener("change",async e=>{
+  const files=[...e.target.files];e.target.value="";
+  if(!assetsApi){$("e-rmsg").textContent="رفع الصور متاح للمحررين فقط.";return}
+  for(let i=0;i<files.length;i++){
+    $("e-rmsg").textContent="جاري رفع "+(i+1)+" من "+files.length+"…";
+    try{const blob=await shrink(files[i],2200,.86);const r=await assetsApi.upload(blob);let t=null;try{const tb=await shrink(files[i],480,.72);t=(await assetsApi.upload(tb)).id}catch(e){}draftReport.push(t?{id:r.id,t}:{id:r.id});renderReport()}
+    catch(err){$("e-rmsg").textContent="صورة ما اترفعتش ("+((err&&err.code)||"خطأ")+")";}
+  }
+  if(/جاري/.test($("e-rmsg").textContent))$("e-rmsg").textContent="";
+});
 
 function openEditor(c,copy){
   editing=copy?null:(c||null);
@@ -1093,6 +1301,7 @@ function openEditor(c,copy){
   {const v=c?c.brand:"";const known=!v||BRAND_SET.has(v);$("e-brand").value=known?(v||""):OTHER;$("e-brand-other").value=known?"":v;$("e-brand-other-wrap").hidden=known}
   $("e-mode").value=c?modeOf(c):"";renderCalc();
   draftPhotos=(c&&!copy)?[...(c.photos||[])]:[];renderPhotos();
+  draftReport=(c&&!copy)?[...(c.report||[])]:[];renderReport();$("e-rmsg").textContent="";
   if(copy)$("e-upmsg").textContent="النسخة من غير صور: ارفع صور العربية الجديدة، وغيّر اللون أو أي اختلاف.";
   $("manager").open&&$("manager").close();
   $("editor").showModal();
@@ -1109,10 +1318,12 @@ $("saveCar").addEventListener("click",async()=>{
     data.price=null;data.currency=mode==="sa"?"SAR":"USD";
   }
   const before=JSON.stringify(state);
-  const removed=editing?photoIds(editing.photos).filter(id=>!photoIds(draftPhotos).includes(id)):[];
-  if(editing){Object.assign(editing,data,{photos:draftPhotos,sample:false})}
+  const keep=photoIds(draftPhotos).concat(photoIds(draftReport));
+  const removed=editing?carAssetIds(editing).filter(id=>!keep.includes(id)):[];
+  if(data.video&&!safeUrl(data.video)){$("e-msg").textContent="رابط الفيديو لازم يبدأ بـ https://";return}
+  if(editing){Object.assign(editing,data,{photos:draftPhotos,report:draftReport,sample:false})}
   else{const maxAdded=state.cars.reduce((m,c)=>Math.max(m,c.added||0),0);
-    state.cars.push(Object.assign({id:"c"+Date.now().toString(36)},data,{photos:draftPhotos,added:maxAdded+1,addedAt:new Date().toISOString().slice(0,10)}))}
+    state.cars.push(Object.assign({id:"c"+Date.now().toString(36)},data,{photos:draftPhotos,report:draftReport,added:maxAdded+1,addedAt:new Date().toISOString().slice(0,10)}))}
   $("saveCar").disabled=true;$("e-msg").textContent="";
   if(removed.length)await dropAssets(removed);
   const ok=await save();
@@ -1130,7 +1341,7 @@ function openManager(){
       if(!armed){armed=true;del.textContent="تأكيد الحذف";setTimeout(()=>{armed=false;del.textContent="حذف"},4000);return}
       const before=JSON.stringify(state);
       del.disabled=true;del.textContent="جاري الحذف…";
-      await dropAssets(photoIds(c.photos));
+      await dropAssets(carAssetIds(c));
       state.cars=state.cars.filter(x=>x.id!==c.id);
       if(!(await save()))state=JSON.parse(before);
       refreshBrandOptions();render();openManager();
