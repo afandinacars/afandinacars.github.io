@@ -145,4 +145,5 @@ idx=open(os.path.join(repo,'index.html'),encoding='utf-8').read()
 idx=idx.replace('</head>','<script type="application/ld+json">'+ldjs+'</script></head>',1)
 open(os.path.join(repo,'index.html'),'w',encoding='utf-8').write(idx)
 inv=json.loads(re.search(r'<script type="application/json" id="inventory">(.*?)</script>',s,re.S).group(1).replace('\\u003c','<'))
-print(json.dumps(sorted({x for c in inv['cars'] for p in (c.get('photos') or [])+(c.get('report') or []) for x in (p.get('id'),p.get('t')) if x})))
+_imgs=[p for c in inv['cars'] for p in (c.get('photos') or [])+(c.get('report') or [])]+[r['cover'] for r in (inv.get('reviews') or []) if isinstance(r.get('cover'),dict)]
+print(json.dumps(sorted({x for p in _imgs for x in (p.get('id'),p.get('t')) if x})))
