@@ -1746,6 +1746,31 @@ function backupSettings(){
     h("details",null,h("summary",{style:"cursor:pointer;color:var(--muted);font-size:.88rem"},"استرجاع البيانات من نسخة قديمة"),
       h("div",{style:"display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px"},file,restore)));
 }
+const MGR={q:"",f:"all"};
+const MGR_FILTERS=[["all","الكل",()=>true],["eg","في مصر",c=>/^eg-/.test(c.branch)],["kr","في كوريا",c=>c.branch==="kr"],["sa","في السعودية",c=>/^sa-/.test(c.branch)],["available","متاحة",c=>(c.status||"available")==="available"],["reserved","محجوزة",c=>c.status==="reserved"],["sold","مباعة",c=>c.status==="sold"],["noprice","من غير سعر",c=>{const e=effPrice(c);return !e.pick&&(e.price==null||e.price==="")}]];
+function carManagerSection(rowsAll){
+  const list=h("div");
+  const count=h("span",{style:"color:var(--muted);font-size:.88rem"});
+  const search=h("input",{type:"search",placeholder:"ابحث بالاسم أو اللون أو السنة أو الكود…",value:MGR.q,"aria-label":"بحث في السيارات",style:"flex:1 1 220px;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.55rem .75rem;color:var(--ink)"});
+  const chips=h("div",{class:"quick",style:"margin-top:2px"});
+  const draw=()=>{
+    const test=(MGR_FILTERS.find(x=>x[0]===MGR.f)||MGR_FILTERS[0])[2];
+    const words=norm(MGR.q).split(/\s+/).filter(Boolean);
+    const shown=rowsAll.filter(({c,hay})=>test(c)&&words.every(w=>hay.includes(w)));
+    list.replaceChildren(...(shown.length?shown.map(r=>r.el):[h("p",{style:"color:var(--muted)"},rowsAll.length?"مفيش عربيات بالبحث ده.":"لا توجد سيارات بعد.")]));
+    count.textContent=shown.length+" من "+rowsAll.length;
+    chips.replaceChildren(...MGR_FILTERS.map(([k,l,fn])=>{
+      const n=rowsAll.filter(r=>fn(r.c)).length;
+      if(!n&&k!=="all"&&k!==MGR.f)return "";
+      const b=h("button",{class:"qchip",type:"button","aria-pressed":String(MGR.f===k)},l," ",h("small",null,String(n)));
+      b.addEventListener("click",()=>{MGR.f=k;draw()});return b}));
+  };
+  search.addEventListener("input",()=>{MGR.q=search.value;draw()});
+  draw();
+  return h("div",{class:"settings"},
+    h("div",{style:"display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"},h("h3",null,"السيارات"),count),
+    h("div",{style:"display:flex;gap:8px;flex-wrap:wrap"},search),chips,list);
+}
 function openManager(){
   const body=$("mBody");
   const rows=[...state.cars].sort((a,b)=>(b.added||0)-(a.added||0)).map(c=>{
@@ -1764,9 +1789,10 @@ function openManager(){
     fillSelect(st,Object.entries(STATUS));st.value=c.status||"available";
     st.addEventListener("change",async()=>{const old=c.status;c.status=st.value;if(!(await save())){c.status=old;st.value=old}render()});
     return h("div",{class:"list-row"},
-      h("div",{class:"t"},h("b",null,title(c)+" "+(c.year||"")+(c.sample?" (مثال)":"")),h("span",null,(BRANCHES[c.branch]||{}).short||"","  ·  ",c.id)),
+      h("div",{class:"t"},h("b",null,title(c)+" "+(c.year||"")+(c.sample?" (مثال)":"")),h("span",null,[(BRANCHES[c.branch]||{}).short,c.color].filter(Boolean).join("  ·  "),"  ·  ",c.id)),
       st,h("button",{class:"btn btn-line btn-sm",type:"button",onclick:()=>openEditor(c)},"تعديل"),h("button",{class:"btn btn-line btn-sm",type:"button",title:"سيارة جديدة بنفس المواصفات",onclick:()=>openEditor(c,true)},"نسخ"),del);
   });
+  const rowsAll=[...state.cars].sort((a,b)=>(b.added||0)-(a.added||0)).map((c,i)=>({c,el:rows[i],hay:norm([title(c),c.trim,c.year,c.color,c.interior,c.id,(BRANCHES[c.branch]||{}).short,STATUS[c.status||"available"],FUEL[c.fuel]].join(" "))}));
   const samples=state.cars.filter(c=>c.sample).length;
   const clear=samples?h("button",{class:"btn btn-danger btn-sm",type:"button",style:"margin-bottom:12px"},"حذف كل سيارات المثال ("+samples+")"):null;
   if(clear){let armed=false;clear.addEventListener("click",async()=>{
@@ -1818,7 +1844,7 @@ function openManager(){
     h("p",null,"السعر = العربية (بسعر الوون اللي فوق) + الشحن + التخليص + عمولة الشركة. بيتطبق على "+egCount+" عربية."),
     h("div",{class:"form"},einputs),
     h("div",{style:"display:flex;gap:10px;flex-wrap:wrap"},esave,emsg));
-  body.replaceChildren(backupSettings(),ordersSettings(),reviewsSettings(),settings,egSettings,clear||"",rows.length?h("div",null,rows):h("p",null,"لا توجد سيارات بعد."));
+  body.replaceChildren(clear||"",carManagerSection(rowsAll),backupSettings(),ordersSettings(),reviewsSettings(),settings,egSettings);
   if(!$("manager").open)$("manager").showModal();
 }
 $("addCar").addEventListener("click",()=>openEditor(null));
