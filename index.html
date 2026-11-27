@@ -481,6 +481,8 @@ dl.spec dd{font-weight:500}
 .mk-row small{color:var(--muted);font-size:.82rem}
 .mk-flag{font-size:1rem;line-height:1}
 .d-mk{margin:8px 0 2px}
+.price.pick{font-size:1rem;color:var(--accent)}
+.mk-switch:not(:has([aria-pressed="true"])){border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 15%,transparent)}
 </style>
 <template id="shell">
   <div class="admin-bar" id="adminBar" hidden="">
@@ -845,8 +847,8 @@ const photoUrl=p=>p&&p.id?"assets/cars/"+encodeURIComponent(p.id)+".jpg":"";
 const thumbUrl=p=>p&&(p.t||p.id)?"assets/cars/"+encodeURIComponent(p.t||p.id)+".jpg":"";
 /* market the customer is pricing for: Egypt or Saudi (cars priced with both formulas) */
 const MARKETS={eg:{label:"مصر",flag:"🇪🇬"},sa:{label:"السعودية",flag:"🇸🇦"}};
-let market="eg";
-try{const m=localStorage.getItem("afandina-market");if(m==="eg"||m==="sa")market=m;else{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"";if(/Riyadh|Kuwait|Qatar|Bahrain|Dubai|Muscat|Aden/.test(tz))market="sa"}}catch(e){}
+let market=null; /* no country until the customer picks one — the price stays hidden until then */
+const pickPrompt=e=>e&&e.pick;
 const isDual=c=>modeOf(c)==="both"||!!(c.prices&&c.prices.eg&&c.prices.sa);
 function priceFor(c,mk){
   if(c.prices&&c.prices[mk])return c.prices[mk];
@@ -855,24 +857,26 @@ function priceFor(c,mk){
 }
 function effPrice(c){
   const m=modeOf(c);
-  if(isDual(c))return priceFor(c,market);
+  if(isDual(c))return market?priceFor(c,market):{price:null,pick:true};
   if(m==="sa"||m==="eg")return priceFor(c,m);
   return {price:c.price,currency:c.currency,note:c.priceNote||""};
 }
 function priceNode(c){
   const e=effPrice(c);
+  if(e.pick)return h("div",{class:"price pick"},"اختار بلد الاستلام عشان يظهر السعر");
   if(e.price==null||e.price==="")return h("div",{class:"price"},"السعر عند التواصل");
   return h("div",{class:"price"},h("span",{class:"num"},fmt(e.price))," ",h("small",null,(CUR[e.currency]||e.currency||"")+(isDual(c)?" — "+MARKETS[market].label:"")+(e.note?" — "+e.note:"")));
 }
 function photoPrice(c){
   const e=effPrice(c);
+  if(e.pick)return h("div",{class:"ph-price ask"},"🇪🇬 🇸🇦 اختار البلد لعرض السعر");
   if(e.price==null||e.price==="")return h("div",{class:"ph-price ask"},"السعر عند التواصل");
   return h("div",{class:"ph-price"},isDual(c)?h("span",{class:"mk-flag",title:"السعر لـ"+MARKETS[market].label},MARKETS[market].flag):null,h("span",{class:"num"},fmt(e.price)),h("small",null,(CUR[e.currency]||e.currency||"")+(e.note?" · "+e.note:"")));
 }
 function marketSwitch(onChange){
   const box=h("div",{class:"mk-switch",role:"group","aria-label":"اعرض السعر لـ"},h("span",null,"السعر لـ:"));
   for(const k of ["eg","sa"]){const b=h("button",{type:"button","aria-pressed":String(market===k)},MARKETS[k].flag+" "+MARKETS[k].label);
-    b.addEventListener("click",()=>{if(market===k)return;market=k;try{localStorage.setItem("afandina-market",k)}catch(e){}onChange()});box.append(b)}
+    b.addEventListener("click",()=>{if(market===k)return;market=k;onChange()});box.append(b)}
   return box;
 }
 const SITE_URL="https://afandinacars.com/";
@@ -952,7 +956,7 @@ function renderCmpBar(){
 }
 function openCompare(){
   const cars=[...cmp].map(id=>state.cars.find(c=>c.id===id)).filter(Boolean);if(cars.length<2)return;
-  const rows=[["السعر",c=>{const e=effPrice(c);return e.price==null||e.price===""?"عند التواصل":fmt(e.price)+" "+(CUR[e.currency]||e.currency||"")}],["الموديل",c=>c.year],["الفئة",c=>c.trim],["الممشى",c=>c.km!=null&&c.km!==""?fmt(c.km)+" كم":""],["المحرك",c=>c.cc?fmt(c.cc)+" cc":""],["القوة",c=>c.hp?c.hp+" حصان":""],["الوقود",c=>FUEL[c.fuel]],["ناقل الحركة",c=>c.trans],["الدفع",c=>DRIVE[c.drive]],["المقاعد",c=>c.seats],["اللون",c=>c.color],["الفرش",c=>c.interior],["الفحص",c=>c.inspection],["المكان",c=>(BRANCHES[c.branch]||{}).short],["الحالة",c=>STATUS[c.status]]];
+  const rows=[["السعر",c=>{const e=effPrice(c);return e.pick?"اختار البلد":e.price==null||e.price===""?"عند التواصل":fmt(e.price)+" "+(CUR[e.currency]||e.currency||"")}],["الموديل",c=>c.year],["الفئة",c=>c.trim],["الممشى",c=>c.km!=null&&c.km!==""?fmt(c.km)+" كم":""],["المحرك",c=>c.cc?fmt(c.cc)+" cc":""],["القوة",c=>c.hp?c.hp+" حصان":""],["الوقود",c=>FUEL[c.fuel]],["ناقل الحركة",c=>c.trans],["الدفع",c=>DRIVE[c.drive]],["المقاعد",c=>c.seats],["اللون",c=>c.color],["الفرش",c=>c.interior],["الفحص",c=>c.inspection],["المكان",c=>(BRANCHES[c.branch]||{}).short],["الحالة",c=>STATUS[c.status]]];
   const head=h("tr",null,h("th",null,""),cars.map(c=>h("th",{scope:"col"},(c.photos||[])[0]?h("img",{src:thumbUrl(c.photos[0]),alt:""}):null,h("b",null,title(c)))));
   const body=rows.map(([label,f])=>{const vals=cars.map(c=>{const v=f(c);return v==null||v===""?"—":String(v)});const diff=new Set(vals).size>1;return h("tr",{class:diff?"diff":null},h("th",{scope:"row"},label),vals.map(v=>h("td",null,v)))});
   const actions=h("tr",null,h("th",null,""),cars.map(c=>h("td",null,c.status!=="sold"?waBtns(c,"btn-sm")[0]:"")));
@@ -1133,7 +1137,7 @@ function renderRecent(){
   $("recent").hidden=!list.length;
   $("recentRow").replaceChildren(...list.map(c=>{const p=(c.photos||[])[0];const e=effPrice(c);
     return h("button",{class:"mini",type:"button",onclick:()=>openCar(c.id)},p?h("img",{src:thumbUrl(p),alt:"",loading:"lazy"}):h("span",{class:"sil-box"}),
-      h("div",null,h("b",null,title(c)+(c.year?" "+c.year:"")),h("span",null,c.status==="sold"?"مباعة":(e.price!=null&&e.price!==""?fmt(e.price)+" "+(CUR[e.currency]||e.currency||""):"السعر عند التواصل"))))}));
+      h("div",null,h("b",null,title(c)+(c.year?" "+c.year:"")),h("span",null,c.status==="sold"?"مباعة":(e.pick?"اختار البلد للسعر":e.price!=null&&e.price!==""?fmt(e.price)+" "+(CUR[e.currency]||e.currency||""):"السعر عند التواصل"))))}));
 }
 $("recentClear").addEventListener("click",()=>{recent=[];try{localStorage.removeItem("afandina-recent")}catch(e){}renderRecent()});
 /* 2) swipe gallery + full-screen viewer */
@@ -1190,7 +1194,7 @@ function renderQuick(){
 function renderMarket(){
   const any=state.cars.some(c=>c.status!=="sold"&&isDual(c));
   $("mkRow").hidden=!any;
-  if(any)$("mkRow").replaceChildren(marketSwitch(()=>{render();if($("detail").open&&curCar)openCar(curCar,"pop")}),h("small",null,"العربيات اللي في كوريا بيظهر سعرها حسب البلد اللي هتستلم فيها"));
+  if(any)$("mkRow").replaceChildren(marketSwitch(()=>{render();if($("detail").open&&curCar)openCar(curCar,"pop")}),h("small",null,market?"الأسعار محسوبة للاستلام في "+MARKETS[market].label:"اختار البلد اللي هتستلم فيها عشان يظهر سعر العربيات اللي في كوريا"));
 }
 let curCar=null;
 /* ---------- detail ---------- */
