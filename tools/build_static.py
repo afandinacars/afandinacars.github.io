@@ -8,6 +8,7 @@ s=open(src,encoding='utf-8').read()
 i=s.find('<title>'); 
 if i>0: s=s[i:]
 s=re.sub(r'</body></html>\s*$','',s)
+s=s.replace('https://afandinacars.github.io/','https://afandinacars.com/')
 # --- keep internal pricing out of the public copy: work out each final price here,
 # then drop Korea prices, formulas, margins and commissions from the published data.
 import math
@@ -52,9 +53,9 @@ desc='معرض أفندينا موتورز: سيارات كورية مفحوصة
 head=('<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">'
  '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'
  f'<meta name="description" content="{desc}"><meta property="og:title" content="أفندينا موتورز — معرض السيارات">'
- f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.github.io/assets/og-cover.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:type" content="website"><meta property="og:url" content="https://afandinacars.github.io/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://afandinacars.github.io/assets/og-cover.jpg"><meta name="theme-color" content="#002838"><link rel="apple-touch-icon" href="assets/logo-t.png">'
+ f'<meta property="og:description" content="{desc}"><meta property="og:image" content="https://afandinacars.com/assets/og-cover.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:type" content="website"><meta property="og:url" content="https://afandinacars.com/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://afandinacars.com/assets/og-cover.jpg"><meta name="theme-color" content="#002838"><link rel="apple-touch-icon" href="assets/logo-t.png">'
  '<title>أفندينا موتورز | سيارات كورية مفحوصة في مصر والسعودية</title>'
- '<link rel="canonical" href="https://afandinacars.github.io/">'
+ '<link rel="canonical" href="https://afandinacars.com/">'
  '<meta name="google-site-verification" content="xJOs4wAqrjDSPvfuxRlrdN_bTEex_lm_G-FJCN1y9n0">'
  '<link rel="icon" href="assets/logo.png">'
  '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.5 system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>'
@@ -66,7 +67,7 @@ open(os.path.join(repo,'index.html'),'w',encoding='utf-8').write(out)
 open(os.path.join(repo,'.nojekyll'),'w').write('')
 # ---- per-car share pages, sitemap, structured data ----
 import html as _h, shutil as _sh, datetime as _dt
-SITE="https://afandinacars.github.io/"
+SITE="https://afandinacars.com/"
 _inv=json.loads(re.search(r'<script type="application/json" id="inventory">(.*?)</script>',out,re.S).group(1).replace('\\u003c','<'))
 FUEL={"petrol":"بنزين","diesel":"ديزل","hybrid":"هايبرد","ev":"كهرباء","lpg":"غاز"}
 BR={"eg-10r":"العاشر من رمضان — مصر","eg-nasr":"مدينة نصر — مصر","sa-ryd":"الرياض — السعودية","kr":"في كوريا — جاهزة للشحن"}

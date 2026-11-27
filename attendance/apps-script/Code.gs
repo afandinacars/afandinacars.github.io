@@ -6,7 +6,7 @@
 const CLIENT_ID = 'PUT_YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com';
 
 const TZ = 'Africa/Cairo';
-const APP_URL = 'https://afandinacars.github.io/attendance/';
+const APP_URL = 'https://afandinacars.com/attendance/';
 const REMIND_HOUR = 9; // ساعة إيميل التذكير (بتوقيت القاهرة)
 const SHEETS = {
   Settings:   ['key', 'value'],
