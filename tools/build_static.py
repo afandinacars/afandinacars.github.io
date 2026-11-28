@@ -114,6 +114,21 @@ var back=location.pathname+location.search+location.hash,st=history.state;
 history.pushState(st,"","/go/wa/"+(m?m[1]:"general")+"/"+cc+"/");
 setTimeout(function(){if(location.pathname.indexOf("/go/wa/")===0)history.replaceState(st,"",back)},1500)}catch(_){}},true);
 </script>"""
+# --- Meta Pixel (only when the owner saved a Pixel ID in the admin): PageView, ViewContent per car, Contact per WhatsApp tap
+_px=''
+try:
+    _pid=re.sub(r'\D','',str((json.loads(re.search(r'<script type="application/json" id="inventory">(.*?)</script>',s,re.S).group(1).replace('\\u003c','<')).get('settings') or {}).get('metaPixel') or ''))
+except Exception: _pid=''
+if 10<=len(_pid)<=20:
+    _px=("<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};"
+         "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];"
+         "s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');"
+         "fbq('init','"+_pid+"');fbq('track','PageView');"
+         "(function(){var P=history.pushState,last='';history.pushState=function(st,t,u){var r=P.apply(this,arguments);try{var p=String(u||'');"
+         "var m=p.match(/^\\/car\\/([A-Za-z0-9-]+)\\//);if(m&&m[1]!==last){last=m[1];fbq('track','ViewContent',{content_ids:[m[1]],content_type:'product'})}"
+         "var w=p.match(/^\\/go\\/wa\\/([A-Za-z0-9-]+)\\/(eg|sa)\\//);if(w)fbq('track','Contact',{content_name:w[1],country:w[2]})}catch(_){}return r}})();</script>"
+         '<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id='+_pid+'&ev=PageView&noscript=1"></noscript>')
+    head=head.replace('</head>',_px+'</head>',1)
 out=head+s+_WA_TRACK+'</body></html>'
 os.makedirs(os.path.join(repo,'assets','cars'),exist_ok=True)
 open(os.path.join(repo,'index.html'),'w',encoding='utf-8').write(out)
